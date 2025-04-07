@@ -1,6 +1,7 @@
 package um.g7.Access_Service.Domain;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,11 +16,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Accesses")
+@Table(name = "Access")
 public class Access {
     @Id
-    private int accessId;
-    private Date accessDate;
+    private UUID accessId;
+    private LocalDateTime accessDate;
     private String firstName;
     private String lastName;
     private String cid;

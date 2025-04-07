@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import io.grpc.stub.StreamObserver;
 import um.g7.Access_Service.Infrastructure.AccessRepository;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.UUID;
 
 import org.springframework.grpc.sample.proto.AccessGrpc;
 import org.springframework.grpc.sample.proto.AccessProto.FailedAccess;
@@ -30,8 +32,8 @@ public class AccessService extends AccessGrpc.AccessImplBase{
     @Override
     public void sumbitSuccessfulAccess(SuccessfulAccess request, StreamObserver<SubmitResponse> responseObserver) {
         Access temp = Access.builder()
-            .accessId(request.getAccessId())
-            .accessDate( new Date(request.getTime()))
+            .accessId(UUID.randomUUID())
+            .accessDate(LocalDateTime.ofEpochSecond(request.getTime(), 0, ZoneOffset.of("-03:00")))
             .firstName(request.getFirstName())
             .lastName(request.getLastName())
             .cid(request.getCid())

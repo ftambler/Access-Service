@@ -11,11 +11,10 @@ service Access {
 }
 
 message SuccessfulAccess {
-    int32 accessId = 1;
-    int64 time = 2;
-    string firstName = 3;
-    string lastName = 4;
-    string cid = 5;
+    int64 time = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string cid = 4;
 }
 
 message FailedAccess {
