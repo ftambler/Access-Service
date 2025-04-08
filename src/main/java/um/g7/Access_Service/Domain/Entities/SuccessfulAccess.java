@@ -1,4 +1,4 @@
-package um.g7.Access_Service.Domain;
+package um.g7.Access_Service.Domain.Entities;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Access")
-public class Access {
+@Table(name = "successful_access")
+public class SuccessfulAccess {
     @Id
     private UUID accessId;
     private LocalDateTime accessDate;

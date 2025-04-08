@@ -5,23 +5,23 @@ option java_package = "org.springframework.grpc.sample.proto";
 option java_outer_classname = "AccessProto";
 
 service Access {
-    rpc SumbitSuccessfulAccess(SuccessfulAccess) returns (SubmitResponse) {} 
+    rpc SumbitSuccessfulAccess(SuccessfulAccessDTO) returns (SubmitResponseDTO) {} 
     
-    rpc SumbitFailedAccess(FailedAccess) returns (SubmitResponse) {} 
+    rpc SumbitFailedAccess(FailedAccessDTO) returns (SubmitResponseDTO) {} 
 }
 
-message SuccessfulAccess {
+message SuccessfulAccessDTO {
     int64 time = 1;
     string firstName = 2;
     string lastName = 3;
     string cid = 4;
 }
 
-message FailedAccess {
+message FailedAccessDTO {
     int64 time = 1;
 }
 
-message SubmitResponse {
+message SubmitResponseDTO {
     string response = 1;
 }
 
