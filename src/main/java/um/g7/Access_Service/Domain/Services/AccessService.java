@@ -28,7 +28,7 @@ public class AccessService extends AccessGrpc.AccessImplBase{
     }
 
     @Override
-    public void sumbitFailedAccess(FailedAccessDTO request, StreamObserver<SubmitResponseDTO> responseObserver) {
+    public void submitFailedAccess(FailedAccessDTO request, StreamObserver<SubmitResponseDTO> responseObserver) {
         FailedAccess temp = FailedAccess.builder()
             .accessId(UUID.randomUUID())
             .accessDate(LocalDateTime.ofEpochSecond(request.getTime(), 0, ZoneOffset.of("-03:00")))
@@ -42,7 +42,7 @@ public class AccessService extends AccessGrpc.AccessImplBase{
     }
 
     @Override
-    public void sumbitSuccessfulAccess(SuccessfulAccessDTO request, StreamObserver<SubmitResponseDTO> responseObserver) {
+    public void submitSuccessfulAccess(SuccessfulAccessDTO request, StreamObserver<SubmitResponseDTO> responseObserver) {
         SuccessfulAccess temp = SuccessfulAccess.builder()
             .accessId(UUID.randomUUID())
             .accessDate(LocalDateTime.ofEpochSecond(request.getTime(), 0, ZoneOffset.of("-03:00")))
