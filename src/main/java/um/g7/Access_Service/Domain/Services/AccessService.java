@@ -1,6 +1,7 @@
 package um.g7.Access_Service.Domain.Services;
 
 import io.grpc.stub.StreamObserver;
+import net.devh.boot.grpc.server.service.GrpcService;
 import um.g7.Access_Service.Domain.Entities.FailedAccess;
 import um.g7.Access_Service.Domain.Entities.SuccessfulAccess;
 import um.g7.Access_Service.Infrastructure.FailedAccessRepository;
@@ -14,7 +15,6 @@ import org.springframework.grpc.sample.proto.AccessGrpc;
 import org.springframework.grpc.sample.proto.AccessProto.FailedAccessDTO;
 import org.springframework.grpc.sample.proto.AccessProto.SubmitResponseDTO;
 import org.springframework.grpc.sample.proto.AccessProto.SuccessfulAccessDTO;
-import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
 public class AccessService extends AccessGrpc.AccessImplBase{
