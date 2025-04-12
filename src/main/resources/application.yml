@@ -14,3 +14,5 @@ spring:
       ddl-auto: update
     show-sql: true
     generate-ddl: true
+  kafka:
+    bootstrap-servers: "localhost:9092"
