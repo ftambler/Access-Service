@@ -8,8 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import um.g7.Access_Service.Application.DTOs.UserDTO;
 import um.g7.Access_Service.Domain.Entities.UserEntity;
-import um.g7.Access_Service.Infrastructure.UserRepository;
-import um.g7.Access_Service.Infrastructure.UserTopicProducer;
+import um.g7.Access_Service.Infrastructure.KafkaProducers.UserTopicProducer;
+import um.g7.Access_Service.Infrastructure.Repositories.UserRepository;
 
 @Service
 public class UserService {
@@ -30,10 +30,8 @@ public class UserService {
             .lastName(userDTO.getLastName())
             .cid(userDTO.getCid()).build();
 
-        userRepository.save(user);
-        userTopicProducer.addUser(user);
-        
-        return user;
+            userTopicProducer.addUser(user);
+            return userRepository.save(user);
     }
 
 }

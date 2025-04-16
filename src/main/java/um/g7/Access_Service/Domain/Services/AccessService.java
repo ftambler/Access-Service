@@ -4,8 +4,8 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import um.g7.Access_Service.Domain.Entities.FailedAccess;
 import um.g7.Access_Service.Domain.Entities.SuccessfulAccess;
-import um.g7.Access_Service.Infrastructure.FailedAccessRepository;
-import um.g7.Access_Service.Infrastructure.SuccessfulAccessRepository;
+import um.g7.Access_Service.Infrastructure.Repositories.FailedAccessRepository;
+import um.g7.Access_Service.Infrastructure.Repositories.SuccessfulAccessRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

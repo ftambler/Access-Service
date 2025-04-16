@@ -1,4 +1,4 @@
-package um.g7.Access_Service.Infrastructure;
+package um.g7.Access_Service.Infrastructure.KafkaProducers;
 
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
