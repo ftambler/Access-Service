@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import um.g7.Access_Service.Domain.Entities.UserEntity;
+import um.g7.Access_Service.Domain.Entities.UserRFID;
 import um.g7.Access_Service.Domain.Entities.UserVector;
 
 @Component
@@ -29,6 +30,10 @@ public class UserTopicProducer {
 
     public void addVectorToUser(UserVector userVector) throws JsonProcessingException {
         kafkaTemplate.send(USER_VECTOR_TOPIC, objectMapper.writeValueAsString(userVector));
+    }
+
+    public void addRFIDToUser(UserRFID userRFID) throws JsonProcessingException {
+        kafkaTemplate.send(USER_RFID_TOPIC, objectMapper.writeValueAsString(userRFID));
     }
 
 }
