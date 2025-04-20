@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import um.g7.Access_Service.Application.DTOs.UserDTO;
-import um.g7.Access_Service.Application.DTOs.VectorDTO;
 import um.g7.Access_Service.Domain.Entities.UserEntity;
 import um.g7.Access_Service.Domain.Entities.UserRFID;
 import um.g7.Access_Service.Domain.Entities.UserVector;
+import um.g7.Access_Service.Domain.Entities.VectorAndPicture;
 import um.g7.Access_Service.Domain.Services.UserService;
+import um.g7.Access_Service.Domain.Services.VectorizeService;
+
 
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +25,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
     
     private UserService userService;
+    private VectorizeService vectorizeService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, VectorizeService vectorizeService) {
         this.userService = userService;
+        this.vectorizeService = vectorizeService;
     }
 
     @PostMapping()
@@ -40,9 +44,13 @@ public class UserController {
     }
 
     @PostMapping("/{id}/vector")
-    public ResponseEntity<UserVector> insertVector(@PathVariable("id") UUID userId, @RequestBody VectorDTO vectorDTO) throws JsonProcessingException {
-        UserVector userVector = UserVector.builder().userId(userId).vector(vectorDTO.vector()).build();
-        return ResponseEntity.ok(userService.insertVector(userVector));
+    public ResponseEntity<String> insertVector(@PathVariable("id") UUID userId, @RequestBody String base64String) throws JsonProcessingException {
+        VectorAndPicture response = vectorizeService.getVectorAndPicture(base64String);
+        
+        UserVector userVector = UserVector.builder().userId(userId).vector(response.vector()).build();
+        userService.insertVector(userVector);
+        
+        return ResponseEntity.ok(response.base64String());
     }
 
     @PostMapping("/{id}/rfid/{rfid}")
