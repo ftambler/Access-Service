@@ -19,5 +19,5 @@ import lombok.NoArgsConstructor;
 public class UserRFID {
     @Id
     private UUID userId;
-    private long rfid;
+    private String rfid;
 }

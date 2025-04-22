@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}/rfid/{rfid}")
-    public ResponseEntity<UserRFID> insertRFID(@PathVariable("id") UUID userId, @PathVariable("rfid") long rfid) throws JsonProcessingException {
+    public ResponseEntity<UserRFID> insertRFID(@PathVariable("id") UUID userId, @PathVariable("rfid") String rfid) throws JsonProcessingException {
         UserRFID userRFID = UserRFID.builder().userId(userId).rfid(rfid).build();
         return ResponseEntity.ok(userService.insertRFID(userRFID));
 
