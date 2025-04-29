@@ -12,7 +12,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "users")
+@Table(name = "admins")
 @Data
 @Builder
 @NoArgsConstructor

@@ -2,6 +2,8 @@ package um.g7.Access_Service.Domain.Services;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import um.g7.Access_Service.Domain.Entities.Admin;
@@ -15,12 +17,15 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public AdminService(AdminRepository adminRepository, JwtService jwtService) {
         this.adminRepository = adminRepository;
         this.jwtService = jwtService;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    public String login(String email, String password) {
+    public String login(String email, String password) throws BadCredentialsException {
         Optional<Admin> optAdmin = adminRepository.getByEmail(email);
 
         if(optAdmin.isEmpty())

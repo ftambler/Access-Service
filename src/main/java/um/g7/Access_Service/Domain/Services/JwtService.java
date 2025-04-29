@@ -12,10 +12,10 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
     
-    @Value("${security.jwt.secret-key}")
-    private String secretKey;
-    @Value("${security.jwt.expiration-time}")
-    private Integer expirationTime;
+    // @Value("${security.jwt.secret-key}")
+    private String secretKey = "POSAJOAIGJOGDIHasldljsdkjFDLDGOhi";
+    // @Value("${security.jwt.expiration-time}")
+    private Integer expirationTime = 10000;
 
     public String generateToken(String username) {
         return Jwts.builder()

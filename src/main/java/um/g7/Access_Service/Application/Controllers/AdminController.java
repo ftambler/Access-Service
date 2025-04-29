@@ -4,11 +4,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import um.g7.Access_Service.Application.DTOs.CredentialsDTO;
+import um.g7.Access_Service.Domain.Exception.BadCredentialsException;
 import um.g7.Access_Service.Domain.Services.AdminService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 @RestController
@@ -21,8 +23,8 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestBody CredentialsDTO credentialsDTO) {
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody CredentialsDTO credentialsDTO) throws BadCredentialsException {
         String token = adminService.login(credentialsDTO.getEmail(), credentialsDTO.getPassword());
 
         return ResponseEntity.ok(token);
