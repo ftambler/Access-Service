@@ -34,6 +34,7 @@ dependencies {
 	implementation 'io.grpc:grpc-services'
 	implementation 'net.devh:grpc-spring-boot-starter:2.15.0.RELEASE'
 	implementation 'org.springframework.kafka:spring-kafka'
+	implementation("io.jsonwebtoken:jjwt:0.12.6")
 	// implementation("org.springframework.ai:spring-ai-pgvector-store:1.0.0-M7")
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
