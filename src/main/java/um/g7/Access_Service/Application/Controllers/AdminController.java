@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import um.g7.Access_Service.Application.DTOs.CredentialsDTO;
+import um.g7.Access_Service.Application.DTOs.TokenDTO;
 import um.g7.Access_Service.Domain.Exception.AdminAlreadyExists;
 import um.g7.Access_Service.Domain.Exception.BadCredentialsException;
 import um.g7.Access_Service.Domain.Services.AdminService;
@@ -25,10 +26,10 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody CredentialsDTO credentialsDTO) throws BadCredentialsException {
+    public ResponseEntity<TokenDTO> login(@RequestBody CredentialsDTO credentialsDTO) throws BadCredentialsException {
         String token = adminService.login(credentialsDTO.getEmail(), credentialsDTO.getPassword());
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new TokenDTO(token));
     }
 
     @PostMapping("/register")
