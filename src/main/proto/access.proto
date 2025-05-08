@@ -15,10 +15,17 @@ message SuccessfulAccessDTO {
     string firstName = 2;
     string lastName = 3;
     string cid = 4;
+    AccessTypeEnum accessType = 5;
 }
 
 message FailedAccessDTO {
     int64 time = 1;
+    AccessTypeEnum accessType = 2;
+}
+
+enum AccessTypeEnum {
+    CAMERA = 0;
+    RFID = 1;
 }
 
 message SubmitResponseDTO {

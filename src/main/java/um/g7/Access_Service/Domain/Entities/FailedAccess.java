@@ -21,4 +21,5 @@ public class FailedAccess {
     @Id
     private UUID accessId;
     private LocalDateTime accessDate;
+    private AccessTypeEnum accessType;
 }
