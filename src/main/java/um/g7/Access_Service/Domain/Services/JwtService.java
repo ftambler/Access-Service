@@ -6,33 +6,75 @@ import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Service;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-    
+
     // @Value("${security.jwt.secret-key}")
     private String secretKey = "POSAJOAIGJOGDIHasldljsdkjFDLDGOhi";
     // @Value("${security.jwt.expiration-time}")
-    private Integer expirationTime = 10000;
-    
+    private Integer expirationTime = 100000;
+
+    private final String ADMINTYPE = "admin";
+    private final String DOORTYPE = "raspi";
+
+    private final JwtParser jwtParser;
+
+    public JwtService() {
+        this.jwtParser = Jwts.parser().verifyWith(getKey()).build();
+    }
+
     private SecretKey getKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public String generateToken(String email) {
+    public String generateAdminToken(String email) {
         return Jwts.builder()
                 .subject(email)
+                .claim("type", ADMINTYPE)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() * expirationTime))
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getKey())
                 .compact();
     }
 
+    public boolean isValidAdminToken(String token) {
+        Jws<Claims> claims = parseToken(token);
+        if(claims == null) return false;
+
+        return claims.getPayload().get("type").equals(ADMINTYPE);
+    }
+
+    public String generateDoorToken(String email) {
+        return Jwts.builder()
+                .subject(email)
+                .claim("type", DOORTYPE)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 864000000))
+                .signWith(getKey())
+                .compact();
+    }
+
+    public boolean isValidDoorToken(String token) {
+        Jws<Claims> claims = parseToken(token);
+        if(claims == null) return false;
+
+        return claims.getPayload().get("type").equals(DOORTYPE);
+    }
+
+    public Jws<Claims> parseToken(String token) {
+        try {
+            return jwtParser.parseSignedClaims(token);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 
     public String getEmailFromToken(String token) {
         String email = Jwts.parser()
@@ -43,22 +85,5 @@ public class JwtService {
 
         return email;
     }
-    // Validate JWT token
-    public boolean validateJwtToken(String token) {
-        try {
-            Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token);
-            return true;
-        } catch (SecurityException e) {
-            System.out.println("Invalid JWT signature: " + e.getMessage());
-        } catch (MalformedJwtException e) {
-            System.out.println("Invalid JWT token: " + e.getMessage());
-        } catch (ExpiredJwtException e) {
-            System.out.println("JWT token is expired: " + e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            System.out.println("JWT token is unsupported: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("JWT claims string is empty: " + e.getMessage());
-        }
-        return false;
-    }
+
 }

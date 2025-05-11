@@ -5,6 +5,8 @@ import java.time.ZoneOffset;
 import java.util.UUID;
 
 import org.springframework.grpc.sample.proto.AccessGrpc;
+import org.springframework.grpc.sample.proto.AccessProto.DoorCredentialsDTO;
+import org.springframework.grpc.sample.proto.AccessProto.DoorTokenDTO;
 import org.springframework.grpc.sample.proto.AccessProto.FailedAccessDTO;
 import org.springframework.grpc.sample.proto.AccessProto.SubmitResponseDTO;
 import org.springframework.grpc.sample.proto.AccessProto.SuccessfulAccessDTO;
@@ -15,14 +17,20 @@ import um.g7.Access_Service.Domain.Entities.AccessTypeEnum;
 import um.g7.Access_Service.Domain.Entities.FailedAccess;
 import um.g7.Access_Service.Domain.Entities.SuccessfulAccess;
 import um.g7.Access_Service.Domain.Services.AccessService;
+import um.g7.Access_Service.Domain.Services.DoorService;
+import um.g7.Access_Service.Domain.Services.JwtService;
 
 @GrpcService
 public class AccessController extends AccessGrpc.AccessImplBase{
 
     private final AccessService accessService;
+    private final JwtService jwtService;
+    private final DoorService doorService;
 
-    public AccessController(AccessService accessService) {
+    public AccessController(AccessService accessService, JwtService jwtService, DoorService doorService) {
         this.accessService = accessService;
+        this.jwtService = jwtService;
+        this.doorService = doorService;
     }
 
     @Override
@@ -53,5 +61,18 @@ public class AccessController extends AccessGrpc.AccessImplBase{
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
+
+    @Override
+    public void login(DoorCredentialsDTO request, StreamObserver<DoorTokenDTO> responseObserver) {
+        //validar login
+        if(doorService.isValidDoor(request.getDoorName(), request.getPasscode())) {
+            String token = jwtService.generateDoorToken(request.getDoorName());
+            responseObserver.onNext(DoorTokenDTO.newBuilder().setToken(token).build());
+        }
+
+        responseObserver.onCompleted();
+    }
     
+    
+
 }

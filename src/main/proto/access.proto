@@ -8,6 +8,8 @@ service Access {
     rpc SubmitSuccessfulAccess(SuccessfulAccessDTO) returns (SubmitResponseDTO) {} 
     
     rpc SubmitFailedAccess(FailedAccessDTO) returns (SubmitResponseDTO) {} 
+
+    rpc Login(DoorCredentialsDTO) returns (DoorTokenDTO) {}
 }
 
 message SuccessfulAccessDTO {
@@ -32,3 +34,11 @@ message SubmitResponseDTO {
     string response = 1;
 }
 
+message DoorCredentialsDTO {
+    string doorName = 1;
+    string passcode = 2;
+}
+
+message DoorTokenDTO {
+    string token = 1;
+}

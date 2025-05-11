@@ -38,7 +38,7 @@ public class AdminService {
         if (!passwordEncoder.matches(password, admin.getPassword()))
             throw new BadCredentialsException("Bad Credentials");
         
-        return "Bearer " + jwtService.generateToken(admin.getEmail());        
+        return "Bearer " + jwtService.generateAdminToken(admin.getEmail());        
     }
     
     public void register(String email, String password) throws AdminAlreadyExists {
