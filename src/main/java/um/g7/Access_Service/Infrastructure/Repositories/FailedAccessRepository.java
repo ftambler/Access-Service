@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import um.g7.Access_Service.Domain.Entities.AccessCounterDetails;
 import um.g7.Access_Service.Domain.Entities.FailedAccess;
 
 @Repository

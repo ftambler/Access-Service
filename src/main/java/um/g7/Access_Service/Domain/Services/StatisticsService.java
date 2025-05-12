@@ -1,6 +1,5 @@
 package um.g7.Access_Service.Domain.Services;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import um.g7.Access_Service.Domain.Entities.AccessCounterDetails;
 import um.g7.Access_Service.Infrastructure.Repositories.FailedAccessRepository;

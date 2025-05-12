@@ -68,4 +68,8 @@ public class AdminService {
 
         adminRepository.save(admin);
     }
+
+    public void checkForAdmin() throws AdminAlreadyExists {
+        if(adminRepository.count() == 0) register("admin@admin.com", "admin");
+    }
 }
