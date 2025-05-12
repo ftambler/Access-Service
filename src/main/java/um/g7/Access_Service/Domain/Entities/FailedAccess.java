@@ -21,5 +21,6 @@ public class FailedAccess {
     @Id
     private UUID accessId;
     private LocalDateTime accessDate;
-    private AccessTypeEnum accessType;
+    private String accessType;
+    private String doorName;
 }

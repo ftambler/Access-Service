@@ -38,7 +38,8 @@ public class AccessController extends AccessGrpc.AccessImplBase{
         FailedAccess failedAccess = FailedAccess.builder()
             .accessId(UUID.randomUUID())
             .accessDate(LocalDateTime.ofEpochSecond(request.getTime(), 0, ZoneOffset.of("-03:00")))
-            .accessType(AccessTypeEnum.values()[request.getAccessTypeValue()])
+            .accessType(AccessTypeEnum.values()[request.getAccessTypeValue()].name())
+            .doorName(request.getDoorName())
             .build();
 
         SubmitResponseDTO response = accessService.submitFailedAccess(failedAccess, responseObserver);
@@ -54,7 +55,8 @@ public class AccessController extends AccessGrpc.AccessImplBase{
             .firstName(request.getFirstName())
             .lastName(request.getLastName())
             .cid(request.getCid())
-            .accessType(AccessTypeEnum.values()[request.getAccessTypeValue()])
+            .accessType(AccessTypeEnum.values()[request.getAccessTypeValue()].name())
+            .doorName(request.getDoorName())
             .build();
         
         SubmitResponseDTO response = accessService.submitSuccessfulAccess(successfulAccess, responseObserver);
@@ -63,16 +65,12 @@ public class AccessController extends AccessGrpc.AccessImplBase{
     }
 
     @Override
-    public void login(DoorCredentialsDTO request, StreamObserver<DoorTokenDTO> responseObserver) {
-        //validar login
-        if(doorService.isValidDoor(request.getDoorName(), request.getPasscode())) {
+    public void connect(DoorCredentialsDTO request, StreamObserver<DoorTokenDTO> responseObserver) {
+        if(doorService.validAndCreateIfNull(request.getDoorName(), request.getPasscode(), request.getDoorAccessLevel())) {
             String token = jwtService.generateDoorToken(request.getDoorName());
             responseObserver.onNext(DoorTokenDTO.newBuilder().setToken(token).build());
         }
 
         responseObserver.onCompleted();
     }
-    
-    
-
 }

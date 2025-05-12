@@ -9,7 +9,7 @@ service Access {
     
     rpc SubmitFailedAccess(FailedAccessDTO) returns (SubmitResponseDTO) {} 
 
-    rpc Login(DoorCredentialsDTO) returns (DoorTokenDTO) {}
+    rpc Connect(DoorCredentialsDTO) returns (DoorTokenDTO) {}
 }
 
 message SuccessfulAccessDTO {
@@ -18,11 +18,13 @@ message SuccessfulAccessDTO {
     string lastName = 3;
     string cid = 4;
     AccessTypeEnum accessType = 5;
+    string doorName = 6;
 }
 
 message FailedAccessDTO {
     int64 time = 1;
     AccessTypeEnum accessType = 2;
+    string doorName = 3;
 }
 
 enum AccessTypeEnum {
@@ -36,7 +38,8 @@ message SubmitResponseDTO {
 
 message DoorCredentialsDTO {
     string doorName = 1;
-    string passcode = 2;
+    int32 doorAccessLevel = 2;
+    string passcode = 3;
 }
 
 message DoorTokenDTO {

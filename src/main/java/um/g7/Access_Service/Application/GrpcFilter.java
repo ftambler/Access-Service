@@ -39,7 +39,7 @@ public class GrpcFilter implements ServerInterceptor {
     private <ReqT, RespT> boolean shouldNotFilter(ServerCall<ReqT, RespT> call) {
         String fullMethodName = call.getMethodDescriptor().getFullMethodName();
         
-        return fullMethodName.equals("Access/Login"); 
+        return fullMethodName.equals("Access/Connect");
     }
 
 
