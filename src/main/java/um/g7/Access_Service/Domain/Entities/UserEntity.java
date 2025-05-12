@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class UserEntity {
     @Id
     private UUID userId;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String cid;
+    private int accessLevel;
 }

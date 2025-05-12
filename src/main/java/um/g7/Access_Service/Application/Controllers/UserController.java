@@ -10,6 +10,7 @@ import um.g7.Access_Service.Domain.Entities.UserEntity;
 import um.g7.Access_Service.Domain.Entities.UserRFID;
 import um.g7.Access_Service.Domain.Entities.UserVector;
 import um.g7.Access_Service.Domain.Entities.VectorAndPicture;
+import um.g7.Access_Service.Domain.Exception.UserNotFoundException;
 import um.g7.Access_Service.Domain.Services.UserService;
 import um.g7.Access_Service.Domain.Services.VectorizeService;
 
@@ -36,9 +37,9 @@ public class UserController {
     public ResponseEntity<UserEntity> createUser(@RequestBody UserDTO userDTO) throws JsonProcessingException {
         UserEntity user = UserEntity.builder()
                 .userId(UUID.randomUUID())
-                .firstName(userDTO.getFirstName())
-                .lastName(userDTO.getLastName())
-                .cid(userDTO.getCid()).build();
+                .fullName(userDTO.getFullName())
+                .cid(userDTO.getCid())
+                .accessLevel(userDTO.getAccessLevel()).build();
 
         return ResponseEntity.ok(userService.createUser(user));
     }
@@ -58,6 +59,12 @@ public class UserController {
         UserRFID userRFID = new UserRFID(userId, rfid);
         return ResponseEntity.ok(userService.insertRFID(userRFID));
 
+    }
+
+    @PutMapping("/{id}/change-access-level/{newLevel}")
+    public ResponseEntity<ResponseStatus> changeAccessLevel(@PathVariable("id") UUID userId, @PathVariable("newLevel") int newLevel) throws JsonProcessingException, UserNotFoundException {
+        userService.changeAccessLevel(userId, newLevel);
+        return ResponseEntity.ok().build();
     }
     
 }
