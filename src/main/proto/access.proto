@@ -8,6 +8,8 @@ service Access {
     rpc SubmitSuccessfulAccess(SuccessfulAccessDTO) returns (SubmitResponseDTO) {} 
     
     rpc SubmitFailedAccess(FailedAccessDTO) returns (SubmitResponseDTO) {} 
+
+    rpc Connect(DoorCredentialsDTO) returns (DoorTokenDTO) {}
 }
 
 message SuccessfulAccessDTO {
@@ -15,13 +17,31 @@ message SuccessfulAccessDTO {
     string firstName = 2;
     string lastName = 3;
     string cid = 4;
+    AccessTypeEnum accessType = 5;
+    string doorName = 6;
 }
 
 message FailedAccessDTO {
     int64 time = 1;
+    AccessTypeEnum accessType = 2;
+    string doorName = 3;
+}
+
+enum AccessTypeEnum {
+    CAMERA = 0;
+    RFID = 1;
 }
 
 message SubmitResponseDTO {
     string response = 1;
 }
 
+message DoorCredentialsDTO {
+    string doorName = 1;
+    int32 doorAccessLevel = 2;
+    string passcode = 3;
+}
+
+message DoorTokenDTO {
+    string token = 1;
+}

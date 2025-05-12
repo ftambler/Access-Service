@@ -24,4 +24,6 @@ public class SuccessfulAccess {
     private String firstName;
     private String lastName;
     private String cid;
+    private String accessType;
+    private String doorName;
 }

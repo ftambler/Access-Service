@@ -1,7 +1,8 @@
 package um.g7.Access_Service.Domain.Entities;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.checkerframework.common.aliasing.qual.Unique;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -11,16 +12,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Table(name = "admins")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "failed_access")
-public class FailedAccess {
+public class Admin {
     @Id
-    private UUID accessId;
-    private LocalDateTime accessDate;
-    private String accessType;
-    private String doorName;
+    private UUID id;
+    @Unique
+    private String email;
+    private String password;
 }
