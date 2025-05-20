@@ -70,6 +70,7 @@ public class AccessController extends AccessGrpc.AccessImplBase{
             String token = jwtService.generateDoorToken(request.getDoorName());
             responseObserver.onNext(DoorTokenDTO.newBuilder().setToken(token).build());
         }
+        else responseObserver.onNext(DoorTokenDTO.newBuilder().setToken("null").build());
 
         responseObserver.onCompleted();
     }

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -15,10 +16,10 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    // @Value("${security.jwt.secret-key}")
-    private String secretKey = "POSAJOAIGJOGDIHasldljsdkjFDLDGOhi";
-    // @Value("${security.jwt.expiration-time}")
-    private Integer expirationTime = 100000;
+    @Value("${security.jwt.secret-key}")
+    private String secretKey;
+    @Value("${security.jwt.expiration-time}")
+    private Integer expirationTime;
 
     private final String ADMINTYPE = "admin";
     private final String DOORTYPE = "raspi";
@@ -55,7 +56,7 @@ public class JwtService {
                 .subject(email)
                 .claim("type", DOORTYPE)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 864000000))
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getKey())
                 .compact();
     }
