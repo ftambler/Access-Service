@@ -1,7 +1,9 @@
 package um.g7.Access_Service.Domain.Services;
 
 import org.springframework.stereotype.Service;
+
 import um.g7.Access_Service.Domain.Entities.Door;
+import um.g7.Access_Service.Infrastructure.KafkaProducers.DoorTopicProducer;
 import um.g7.Access_Service.Infrastructure.Repositories.DoorRepository;
 
 import java.util.List;
@@ -11,12 +13,14 @@ import java.util.UUID;
 @Service
 public class DoorService {
     
-    private final String secretKey = "agnip";
+    private final String secretKey = "asdfghjkl";
 
     private final DoorRepository doorRepository;
+    private final DoorTopicProducer doorTopicProducer;
 
-    public DoorService(DoorRepository doorRepository) {
+    public DoorService(DoorRepository doorRepository, DoorTopicProducer doorTopicProducer) {
         this.doorRepository = doorRepository;
+        this.doorTopicProducer = doorTopicProducer;
     }
 
     public boolean validAndCreateIfNull(String doorName, String passcode, int doorAccessLevel) {
@@ -26,13 +30,16 @@ public class DoorService {
         Optional<Door> doorOptional = doorRepository.findByName(doorName);
 
         if (doorOptional.isEmpty()) {
-            doorRepository.save(new Door(UUID.randomUUID(), doorName, doorAccessLevel));
+            Door door = new Door(UUID.randomUUID(), doorName, doorAccessLevel);
+            doorRepository.save(door);
+            doorTopicProducer.addDoor(door);
             return true;
         }
 
         Door door = doorOptional.get();
         door.setAccessLevel(doorAccessLevel);
         doorRepository.save(door);
+        doorTopicProducer.addDoor(door);
 
         return true;
     }

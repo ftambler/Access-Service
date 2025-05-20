@@ -23,4 +23,8 @@ public class KafkaTopics {
         return TopicBuilder.name("userRFID").build();
     }
     
+    @Bean
+    NewTopic doorTopic() {
+        return TopicBuilder.name("door").build();
+    }
 }
