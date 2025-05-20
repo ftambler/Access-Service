@@ -12,6 +12,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class JwtService {
@@ -24,11 +25,13 @@ public class JwtService {
     private final String ADMINTYPE = "admin";
     private final String DOORTYPE = "raspi";
 
-    private final JwtParser jwtParser;
+    private JwtParser jwtParser;
 
-    public JwtService() {
+
+    @PostConstruct
+    public void configParser() {
         this.jwtParser = Jwts.parser().verifyWith(getKey()).build();
-    }
+    } 
 
     private SecretKey getKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
