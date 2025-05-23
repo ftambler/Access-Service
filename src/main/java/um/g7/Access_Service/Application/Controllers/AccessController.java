@@ -5,8 +5,6 @@ import java.time.ZoneOffset;
 import java.util.UUID;
 
 import org.springframework.grpc.sample.proto.AccessGrpc;
-import org.springframework.grpc.sample.proto.AccessProto.DoorCredentialsDTO;
-import org.springframework.grpc.sample.proto.AccessProto.DoorTokenDTO;
 import org.springframework.grpc.sample.proto.AccessProto.FailedAccessDTO;
 import org.springframework.grpc.sample.proto.AccessProto.SubmitResponseDTO;
 import org.springframework.grpc.sample.proto.AccessProto.SuccessfulAccessDTO;
@@ -61,17 +59,6 @@ public class AccessController extends AccessGrpc.AccessImplBase{
         
         SubmitResponseDTO response = accessService.submitSuccessfulAccess(successfulAccess, responseObserver);
         responseObserver.onNext(response);
-        responseObserver.onCompleted();
-    }
-
-    @Override
-    public void connect(DoorCredentialsDTO request, StreamObserver<DoorTokenDTO> responseObserver) {
-        if(doorService.validAndCreateIfNull(request.getDoorName(), request.getPasscode(), request.getDoorAccessLevel())) {
-            String token = jwtService.generateDoorToken(request.getDoorName());
-            responseObserver.onNext(DoorTokenDTO.newBuilder().setToken(token).build());
-        }
-        else responseObserver.onNext(DoorTokenDTO.newBuilder().setToken("null").build());
-
         responseObserver.onCompleted();
     }
 }

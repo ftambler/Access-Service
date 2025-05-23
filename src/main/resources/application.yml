@@ -22,5 +22,5 @@ services:
   vectorize-service-uri: "http://localhost:5000"
 security:
   jwt:
-    secret-key: ${security.jwt.secret-key}
+    secret-key: ${JWT-SECRET:cbafda759821472b2a66d48a6f502c5a23ca19bea7b49970e82950fa001391d6}
     expiration-time: 864000000
