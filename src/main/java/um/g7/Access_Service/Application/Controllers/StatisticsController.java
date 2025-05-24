@@ -16,28 +16,19 @@ import java.util.List;
 @RequestMapping("/statistics")
 public class StatisticsController {
 
-    private final DoorService doorService;
     private final StatisticsService statisticsService;
 
-    public StatisticsController(DoorService doorService, StatisticsService statisticsService) {
-        this.doorService = doorService;
+    public StatisticsController(StatisticsService statisticsService) {
         this.statisticsService = statisticsService;
-    }
-
-    @GetMapping("/doors")
-    public ResponseEntity<List<DoorDTO>> listDoors() {
-        List<DoorDTO> doorsDTO = doorService.fetchDoors().stream()
-                .map(door -> new DoorDTO(door.getName(), door.getAccessLevel())).toList();
-        return ResponseEntity.ok(doorsDTO);
     }
 
     @GetMapping("/successful-access-count")
     public ResponseEntity<List<AccessCounterDetails>> successfulAccessCount(@RequestParam Long startDate, @RequestParam Long endDate) {
-        return ResponseEntity.ok(statisticsService.successfulAccessStatistics(startDate, endDate));
+        return ResponseEntity.ok(statisticsService.successfulAccessStatistics(startDate/1000, endDate/1000));
     }
 
     @GetMapping("/failed-access-count")
     public ResponseEntity<List<AccessCounterDetails>> failedAccessCount(@RequestParam Long startDate, @RequestParam Long endDate) {
-        return ResponseEntity.ok(statisticsService.failedAccessStatistics(startDate, endDate));
+        return ResponseEntity.ok(statisticsService.failedAccessStatistics(startDate/1000, endDate/1000));
     }
 }
