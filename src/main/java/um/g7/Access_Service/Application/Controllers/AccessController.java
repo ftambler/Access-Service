@@ -15,20 +15,14 @@ import um.g7.Access_Service.Domain.Entities.AccessTypeEnum;
 import um.g7.Access_Service.Domain.Entities.FailedAccess;
 import um.g7.Access_Service.Domain.Entities.SuccessfulAccess;
 import um.g7.Access_Service.Domain.Services.AccessService;
-import um.g7.Access_Service.Domain.Services.DoorService;
-import um.g7.Access_Service.Domain.Services.JwtService;
 
 @GrpcService
 public class AccessController extends AccessGrpc.AccessImplBase{
 
     private final AccessService accessService;
-    private final JwtService jwtService;
-    private final DoorService doorService;
 
-    public AccessController(AccessService accessService, JwtService jwtService, DoorService doorService) {
+    public AccessController(AccessService accessService) {
         this.accessService = accessService;
-        this.jwtService = jwtService;
-        this.doorService = doorService;
     }
 
     @Override

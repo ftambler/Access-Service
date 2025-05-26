@@ -1,6 +1,7 @@
 package um.g7.Access_Service.Domain.Services;
 
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,5 +61,9 @@ public class UserService {
         user.setAccessLevel(newLevel);
         userTopicProducer.addUser(user);
         userRepository.save(user);    
+    }
+
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
     }
 }

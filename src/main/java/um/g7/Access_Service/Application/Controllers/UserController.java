@@ -14,7 +14,7 @@ import um.g7.Access_Service.Domain.Exception.UserNotFoundException;
 import um.g7.Access_Service.Domain.Services.UserService;
 import um.g7.Access_Service.Domain.Services.VectorizeService;
 
-
+import java.util.List;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +31,15 @@ public class UserController {
     public UserController(UserService userService, VectorizeService vectorizeService) {
         this.userService = userService;
         this.vectorizeService = vectorizeService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> allUsers = userService.getAllUsers().stream()
+            .map(user -> new UserDTO(user.getUserId(), user.getFullName(), user.getCid(), user.getAccessLevel()))
+            .toList();
+    
+        return ResponseEntity.ok(allUsers);
     }
 
     @PostMapping()
