@@ -56,7 +56,7 @@ public class AdminService {
         adminRepository.save(admin);
     }
     
-    public void changePassword(String email, String password) throws BadCredentialsException {
+    public void changePassword(String email, String password, String oldPassword) throws BadCredentialsException {
         Optional<Admin> optAdmin = adminRepository.getByEmail(email);
 
         if(optAdmin.isEmpty())
@@ -64,6 +64,9 @@ public class AdminService {
 
         Admin admin = optAdmin.get();
 
+        if(!passwordEncoder.matches(oldPassword, admin.getPassword()))
+            throw new BadCredentialsException("Wrong Old Password");
+        
         admin.setPassword(passwordEncoder.encode(password));
 
         adminRepository.save(admin);

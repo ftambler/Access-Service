@@ -41,7 +41,7 @@ public class AdminController {
     
     @PutMapping("/change-password")
     public ResponseEntity<HttpStatus> changePassword(@RequestBody CredentialsDTO credentialsDTO) throws BadCredentialsException {
-        adminService.changePassword(credentialsDTO.getEmail(), credentialsDTO.getPassword());        
+        adminService.changePassword(credentialsDTO.getEmail(), credentialsDTO.getPassword(), credentialsDTO.getOldPassword());        
 
         return ResponseEntity.ok().build();
     }
