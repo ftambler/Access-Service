@@ -36,7 +36,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> allUsers = userService.getAllUsers().stream()
-            .map(user -> new UserDTO(user.getUserId(), user.getFullName(), user.getCid(), user.getAccessLevel()))
+            .map(user -> new UserDTO(user.getId(), user.getFullName(), user.getCid(), user.getAccessLevel(), user.isHasRfid(), user.isHasFace()))
             .toList();
     
         return ResponseEntity.ok(allUsers);

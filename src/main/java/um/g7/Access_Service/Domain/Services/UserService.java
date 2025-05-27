@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import um.g7.Access_Service.Domain.Entities.UserEntity;
 import um.g7.Access_Service.Domain.Entities.UserRFID;
+import um.g7.Access_Service.Domain.Entities.UserTableData;
 import um.g7.Access_Service.Domain.Entities.UserVector;
 import um.g7.Access_Service.Domain.Exception.UserNotFoundException;
 import um.g7.Access_Service.Infrastructure.KafkaProducers.UserTopicProducer;
@@ -44,6 +45,7 @@ public class UserService {
 
     public UserVector insertVector(UserVector userVector) throws JsonProcessingException {
         userTopicProducer.addVectorToUser(userVector);
+        
         return userVectorRepository.save(userVector);
     }
 
@@ -63,7 +65,16 @@ public class UserService {
         userRepository.save(user);    
     }
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserTableData> getAllUsers() {
+        return userRepository.findAllUsersWRfidFace().stream()
+            .map(proj -> 
+                UserTableData.builder()
+                    .id(proj.getUserId())
+                    .fullName(proj.getFullName())
+                    .cid(proj.getCid())
+                    .accessLevel(proj.getAccessLevel())
+                    .hasRfid(proj.getRfid())
+                    .hasFace(proj.getFace())
+                    .build()).toList();
     }
 }
