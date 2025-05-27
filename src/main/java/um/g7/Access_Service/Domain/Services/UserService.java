@@ -77,4 +77,8 @@ public class UserService {
                     .hasFace(proj.getFace())
                     .build()).toList();
     }
+
+    public void deleteUser(UUID userId) {
+        userRepository.deleteById(userId);
+    }
 }

@@ -75,5 +75,11 @@ public class UserController {
         userService.changeAccessLevel(userId, newLevel);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseStatus> deleteUser(@PathVariable("id") UUID userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
+    }
     
 }
