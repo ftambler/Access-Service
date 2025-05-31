@@ -1,15 +1,10 @@
 package um.g7.Access_Service.Application;
 
-import org.springframework.stereotype.Component;
-
-import io.grpc.Metadata;
-import io.grpc.ServerCall;
+import io.grpc.*;
 import io.grpc.ServerCall.Listener;
 import net.devh.boot.grpc.server.interceptor.GrpcGlobalServerInterceptor;
+import org.springframework.stereotype.Component;
 import um.g7.Access_Service.Domain.Services.JwtService;
-import io.grpc.ServerCallHandler;
-import io.grpc.ServerInterceptor;
-import io.grpc.Status;
 
 @Component
 @GrpcGlobalServerInterceptor

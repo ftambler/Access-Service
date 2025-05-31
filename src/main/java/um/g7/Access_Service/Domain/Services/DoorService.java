@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import um.g7.Access_Service.Domain.Entities.Door;
 import um.g7.Access_Service.Domain.Exception.DoorAlreadyExists;
 import um.g7.Access_Service.Domain.Exception.DoorNotFoundException;
+import um.g7.Access_Service.Infrastructure.KafkaProducers.DeletionTopicProducer;
 import um.g7.Access_Service.Infrastructure.KafkaProducers.DoorTopicProducer;
 import um.g7.Access_Service.Infrastructure.Repositories.DoorRepository;
 
@@ -20,11 +20,15 @@ public class DoorService {
 
     private final DoorRepository doorRepository;
     private final DoorTopicProducer doorTopicProducer;
+    private final DeletionTopicProducer deletionTopicProducer;
+
     private final PasswordEncoder passwordEncoder;
 
-    public DoorService(DoorRepository doorRepository, DoorTopicProducer doorTopicProducer) {
+    public DoorService(DoorRepository doorRepository, DoorTopicProducer doorTopicProducer, DeletionTopicProducer deletionTopicProducer) {
         this.doorRepository = doorRepository;
         this.doorTopicProducer = doorTopicProducer;
+        this.deletionTopicProducer = deletionTopicProducer;
+
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -45,7 +49,7 @@ public class DoorService {
 
         return door.getId().toString();
     }
-
+  
     public void changeDoorAccessLevel(UUID doorId, int level) throws JsonProcessingException {
         Optional<Door> optionalDoor = doorRepository.findById(doorId);
 
@@ -70,5 +74,15 @@ public class DoorService {
 
         doorTopicProducer.addDoor(door);
         doorRepository.save(door);
+    }
+  
+    public void deleteDoor(UUID doorId) throws JsonProcessingException {
+        Optional<Door> optionalDoor = doorRepository.findById(doorId);
+
+        if (optionalDoor.isEmpty())
+            throw new DoorNotFoundException("Cannot find door to delete");
+
+        deletionTopicProducer.deleteDoor(optionalDoor.get());
+        doorRepository.deleteById(doorId);
     }
 }
