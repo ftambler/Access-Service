@@ -86,6 +86,16 @@ public class UserService {
         if (optionalUser.isEmpty())
             throw new UserNotFoundException("Cannot delete non existant user");
 
+        Optional<UserRFID> optionalUserRFID = userRFIDRepository.findById(userId);
+
+        if (optionalUserRFID.isPresent())
+            userRFIDRepository.deleteById(userId);
+
+        Optional<UserVector> optionalUserVector = userVectorRepository.findById(userId);
+
+        if (optionalUserVector.isPresent())
+            userVectorRepository.deleteById(userId);
+
         deletionTopicProducer.deleteUser(optionalUser.get());
         userRepository.deleteById(userId);
     }
