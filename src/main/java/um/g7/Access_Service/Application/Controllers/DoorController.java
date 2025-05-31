@@ -24,7 +24,7 @@ public class DoorController {
     @GetMapping()
     public ResponseEntity<List<DoorDTO>> listDoors() {
         List<DoorDTO> doorsDTO = doorService.fetchDoors().stream()
-                .map(door -> new DoorDTO(door.getName(), door.getAccessLevel())).toList();
+                .map(door -> new DoorDTO(door.getId(), door.getName(), door.getAccessLevel())).toList();
         return ResponseEntity.ok(doorsDTO);
     }
 
