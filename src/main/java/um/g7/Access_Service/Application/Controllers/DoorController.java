@@ -29,14 +29,26 @@ public class DoorController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createDoor(@RequestBody DoorCreatorDTO doorCreatorDTO) {
+    public ResponseEntity<String> createDoor(@RequestBody DoorCreatorDTO doorCreatorDTO) throws JsonProcessingException {
         Door door = Door.builder()
                 .name(doorCreatorDTO.getDoorName())
                 .accessLevel(doorCreatorDTO.getAccessLevel())
                 .passcode(doorCreatorDTO.getPasscode()).build();
         return ResponseEntity.ok(doorService.createDoor(door));
     }
+  
+    @PutMapping("/{id}/change-access-level/{level}")
+    public ResponseEntity<String> modifyDoorAccessLevel(@PathVariable("id") UUID doorId, @PathVariable("level") int level) throws JsonProcessingException {
+        doorService.changeDoorAccessLevel(doorId, level);
+        return ResponseEntity.ok().build();
+    }
 
+    @PutMapping("/{id}/change-password/{passcode}")
+    public ResponseEntity<String> modifyDoorPasscode(@PathVariable("id") UUID doorId, @PathVariable("passcode") String passcode) throws JsonProcessingException {
+        doorService.changeDoorPasscode(doorId, passcode);
+        return ResponseEntity.ok().build();
+    }
+  
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDoor(@PathVariable("id") UUID doorId) throws JsonProcessingException {
         doorService.deleteDoor(doorId);
