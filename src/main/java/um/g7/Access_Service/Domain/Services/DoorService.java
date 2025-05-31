@@ -1,11 +1,13 @@
 package um.g7.Access_Service.Domain.Services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import um.g7.Access_Service.Domain.Entities.Door;
 import um.g7.Access_Service.Domain.Exception.DoorAlreadyExists;
+import um.g7.Access_Service.Domain.Exception.DoorNotFoundException;
 import um.g7.Access_Service.Infrastructure.KafkaProducers.DoorTopicProducer;
 import um.g7.Access_Service.Infrastructure.Repositories.DoorRepository;
 
@@ -30,7 +32,7 @@ public class DoorService {
         return doorRepository.findAll();
     }
 
-    public String createDoor(Door door) {
+    public String createDoor(Door door) throws JsonProcessingException {
         Optional<Door> optionalDoor = doorRepository.findByName(door.getName());
         if (optionalDoor.isPresent())
             throw new DoorAlreadyExists("A door with that name already exists");
@@ -42,5 +44,31 @@ public class DoorService {
         doorRepository.save(door);
 
         return door.getId().toString();
+    }
+
+    public void changeDoorAccessLevel(UUID doorId, int level) throws JsonProcessingException {
+        Optional<Door> optionalDoor = doorRepository.findById(doorId);
+
+        if (optionalDoor.isEmpty())
+            throw new DoorNotFoundException("Could not found the door");
+
+        Door door = optionalDoor.get();
+        door.setAccessLevel(level);
+
+        doorTopicProducer.addDoor(door);
+        doorRepository.save(door);
+    }
+
+    public void changeDoorPasscode(UUID doorId, String passcode) throws JsonProcessingException {
+        Optional<Door> optionalDoor = doorRepository.findById(doorId);
+
+        if (optionalDoor.isEmpty())
+            throw new DoorNotFoundException("Could not found the door");
+
+        Door door = optionalDoor.get();
+        door.setPasscode(passcode);
+
+        doorTopicProducer.addDoor(door);
+        doorRepository.save(door);
     }
 }
