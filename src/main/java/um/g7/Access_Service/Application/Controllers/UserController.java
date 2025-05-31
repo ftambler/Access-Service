@@ -77,7 +77,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseStatus> deleteUser(@PathVariable("id") UUID userId) {
+    public ResponseEntity<ResponseStatus> deleteUser(@PathVariable("id") UUID userId) throws UserNotFoundException, JsonProcessingException {
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
     }

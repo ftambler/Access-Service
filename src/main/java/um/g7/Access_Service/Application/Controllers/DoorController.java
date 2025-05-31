@@ -1,5 +1,6 @@
 package um.g7.Access_Service.Application.Controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import um.g7.Access_Service.Application.DTOs.DoorCreatorDTO;
@@ -33,5 +34,11 @@ public class DoorController {
                 .accessLevel(doorCreatorDTO.getAccessLevel())
                 .passcode(doorCreatorDTO.getPasscode()).build();
         return ResponseEntity.ok(doorService.createDoor(door));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteDoor(@PathVariable("id") String doorId) throws JsonProcessingException {
+        doorService.deleteDoor(doorId);
+        return ResponseEntity.ok().build();
     }
 }
