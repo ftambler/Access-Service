@@ -51,13 +51,13 @@ public class DoorService {
         return door.getId().toString();
     }
 
-    public void deleteDoor(String doorId) throws JsonProcessingException {
-        Optional<Door> optionalDoor = doorRepository.findById(UUID.fromString(doorId));
+    public void deleteDoor(UUID doorId) throws JsonProcessingException {
+        Optional<Door> optionalDoor = doorRepository.findById(doorId);
 
         if (optionalDoor.isEmpty())
             throw new DoorNotFoundException("Cannot find door to delete");
 
         deletionTopicProducer.deleteDoor(optionalDoor.get());
-        doorRepository.deleteById(UUID.fromString(doorId));
+        doorRepository.deleteById(doorId);
     }
 }

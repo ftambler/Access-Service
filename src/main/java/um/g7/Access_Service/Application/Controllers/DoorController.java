@@ -9,6 +9,7 @@ import um.g7.Access_Service.Domain.Entities.Door;
 import um.g7.Access_Service.Domain.Services.DoorService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/doors")
@@ -37,7 +38,7 @@ public class DoorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDoor(@PathVariable("id") String doorId) throws JsonProcessingException {
+    public ResponseEntity<String> deleteDoor(@PathVariable("id") UUID doorId) throws JsonProcessingException {
         doorService.deleteDoor(doorId);
         return ResponseEntity.ok().build();
     }
