@@ -21,8 +21,7 @@ public class SuccessfulAccess {
     @Id
     private UUID accessId;
     private LocalDateTime accessDate;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String cid;
     private String accessType;
     private String doorName;
