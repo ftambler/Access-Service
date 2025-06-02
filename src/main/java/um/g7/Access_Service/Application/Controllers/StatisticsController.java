@@ -11,7 +11,6 @@ import um.g7.Access_Service.Domain.Entities.AccessCounterDetails;
 import um.g7.Access_Service.Domain.Services.StatisticsService;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -40,7 +39,7 @@ public class StatisticsController {
     public ResponseEntity<List<SuccessAccessDTO>> successfulAccessList(@RequestParam(name = "startDate") Long startDate, @RequestParam(name = "endDate") Long endDate) {
         ZoneId zoneId = ZoneId.systemDefault();
 
-        List<SuccessAccessDTO> successfulAccessList = statisticsService.successfulAccessStatisticsList(startDate, endDate).stream().map(successfulAccess -> {
+        List<SuccessAccessDTO> successfulAccessList = statisticsService.successfulAccessStatisticsList(startDate/1000, endDate/1000).stream().map(successfulAccess -> {
             ZonedDateTime zonedDateTime = successfulAccess.getAccessDate().atZone(zoneId);
             Instant instant = zonedDateTime.toInstant();
 
@@ -55,10 +54,10 @@ public class StatisticsController {
     }
 
     @GetMapping("/failed-access-list")
-    public ResponseEntity<?> failedAccessList(@RequestParam(name = "startDate") Long startDate, @RequestParam(name = "endDate") Long endDate) {
+    public ResponseEntity<List<FailAccessDTO>> failedAccessList(@RequestParam(name = "startDate") Long startDate, @RequestParam(name = "endDate") Long endDate) {
         ZoneId zoneId = ZoneId.systemDefault();
 
-        List<FailAccessDTO> failedAccessList = statisticsService.failedAccessStatisticsList(startDate, endDate).stream().map(failedAccess -> {
+        List<FailAccessDTO> failedAccessList = statisticsService.failedAccessStatisticsList(startDate/1000, endDate/1000).stream().map(failedAccess -> {
             ZonedDateTime zonedDateTime = failedAccess.getAccessDate().atZone(zoneId);
             Instant instant = zonedDateTime.toInstant();
 
@@ -68,6 +67,6 @@ public class StatisticsController {
                     .doorName(failedAccess.getDoorName()).build();
         }).toList();
 
-        return ResponseEntity.ok(statisticsService.failedAccessStatisticsList(startDate, endDate));
+        return ResponseEntity.ok(failedAccessList);
     }
 }
