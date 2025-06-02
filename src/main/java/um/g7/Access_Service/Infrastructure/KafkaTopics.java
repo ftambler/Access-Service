@@ -27,9 +27,4 @@ public class KafkaTopics {
     NewTopic doorTopic() {
         return TopicBuilder.name("door").build();
     }
-
-    @Bean
-    NewTopic deletionTopic() {
-        return TopicBuilder.name("deletion").build();
-    }
 }

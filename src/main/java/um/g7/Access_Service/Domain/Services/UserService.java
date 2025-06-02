@@ -1,22 +1,23 @@
 package um.g7.Access_Service.Domain.Services;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import um.g7.Access_Service.Domain.Entities.UserEntity;
 import um.g7.Access_Service.Domain.Entities.UserRFID;
 import um.g7.Access_Service.Domain.Entities.UserTableData;
 import um.g7.Access_Service.Domain.Entities.UserVector;
 import um.g7.Access_Service.Domain.Exception.UserNotFoundException;
-import um.g7.Access_Service.Infrastructure.KafkaProducers.DeletionTopicProducer;
 import um.g7.Access_Service.Infrastructure.KafkaProducers.UserTopicProducer;
 import um.g7.Access_Service.Infrastructure.Repositories.UserRFIDRepository;
 import um.g7.Access_Service.Infrastructure.Repositories.UserRepository;
 import um.g7.Access_Service.Infrastructure.Repositories.UserVectorRepository;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -26,18 +27,15 @@ public class UserService {
     private final UserRFIDRepository userRFIDRepository;
 
     private final UserTopicProducer userTopicProducer;
-    private final DeletionTopicProducer deletionTopicProducer;
 
     public UserService(UserRepository userRepository,
                        UserVectorRepository userVectorRepository,
                        UserTopicProducer userTopicProducer,
-                       UserRFIDRepository userRFIDRepository,
-                       DeletionTopicProducer deletionTopicProducer) {
+                       UserRFIDRepository userRFIDRepository) {
         this.userRepository = userRepository;
         this.userVectorRepository = userVectorRepository;
         this.userTopicProducer = userTopicProducer;
         this.userRFIDRepository = userRFIDRepository;
-        this.deletionTopicProducer = deletionTopicProducer;
     }
 
     public UserEntity createUser(UserEntity user) throws JsonProcessingException {
@@ -80,23 +78,7 @@ public class UserService {
                     .build()).toList();
     }
 
-    public void deleteUser(UUID userId) throws UserNotFoundException, JsonProcessingException {
-        Optional<UserEntity> optionalUser = userRepository.findById(userId);
-
-        if (optionalUser.isEmpty())
-            throw new UserNotFoundException("Cannot delete non existant user");
-
-        Optional<UserRFID> optionalUserRFID = userRFIDRepository.findById(userId);
-
-        if (optionalUserRFID.isPresent())
-            userRFIDRepository.deleteById(userId);
-
-        Optional<UserVector> optionalUserVector = userVectorRepository.findById(userId);
-
-        if (optionalUserVector.isPresent())
-            userVectorRepository.deleteById(userId);
-
-        deletionTopicProducer.deleteUser(optionalUser.get());
+    public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
     }
 }
