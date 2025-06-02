@@ -12,10 +12,11 @@ service Access {
 
 message SuccessfulAccessDTO {
     int64 time = 1;
-    string fullName = 2;
-    string cid = 3;
-    AccessTypeEnum accessType = 4;
-    string doorName = 5;
+    string firstName = 2;
+    string lastName = 3;
+    string cid = 4;
+    AccessTypeEnum accessType = 5;
+    string doorName = 6;
 }
 
 message FailedAccessDTO {

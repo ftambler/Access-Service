@@ -1,8 +1,10 @@
 package um.g7.Access_Service.Application.Controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import um.g7.Access_Service.Application.DTOs.UserDTO;
 import um.g7.Access_Service.Domain.Entities.UserEntity;
 import um.g7.Access_Service.Domain.Entities.UserRFID;
@@ -14,6 +16,8 @@ import um.g7.Access_Service.Domain.Services.VectorizeService;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -73,7 +77,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseStatus> deleteUser(@PathVariable("id") UUID userId) throws UserNotFoundException, JsonProcessingException {
+    public ResponseEntity<ResponseStatus> deleteUser(@PathVariable("id") UUID userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
     }

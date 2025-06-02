@@ -1,4 +1,4 @@
-package um.g7.Access_Service.Infrastructure.Projections;
+package um.g7.Access_Service.Infrastructure.Repositories;
 
 public interface AccessCounterProjection {
     String getDoorName();

@@ -5,15 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import um.g7.Access_Service.Application.DTOs.FailAccessDTO;
-import um.g7.Access_Service.Application.DTOs.SuccessAccessDTO;
 import um.g7.Access_Service.Domain.Entities.AccessCounterDetails;
 import um.g7.Access_Service.Domain.Services.StatisticsService;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -34,40 +28,5 @@ public class StatisticsController {
     @GetMapping("/failed-access-count")
     public ResponseEntity<List<AccessCounterDetails>> failedAccessCount(@RequestParam(name = "startDate") Long startDate, @RequestParam(name = "endDate") Long endDate) {
         return ResponseEntity.ok(statisticsService.failedAccessStatistics(startDate/1000, endDate/1000));
-    }
-
-    @GetMapping("/successful-access-list")
-    public ResponseEntity<List<SuccessAccessDTO>> successfulAccessList(@RequestParam(name = "startDate") Long startDate, @RequestParam(name = "endDate") Long endDate) {
-        ZoneId zoneId = ZoneId.systemDefault();
-
-        List<SuccessAccessDTO> successfulAccessList = statisticsService.successfulAccessStatisticsList(startDate, endDate).stream().map(successfulAccess -> {
-            ZonedDateTime zonedDateTime = successfulAccess.getAccessDate().atZone(zoneId);
-            Instant instant = zonedDateTime.toInstant();
-
-            return SuccessAccessDTO.builder()
-                    .fullName(successfulAccess.getFullName())
-                    .accessDate(instant.toEpochMilli())
-                    .accessType(successfulAccess.getAccessType())
-                    .doorName(successfulAccess.getDoorName()).build();
-        }).toList();
-
-        return ResponseEntity.ok(successfulAccessList);
-    }
-
-    @GetMapping("/failed-access-list")
-    public ResponseEntity<?> failedAccessList(@RequestParam(name = "startDate") Long startDate, @RequestParam(name = "endDate") Long endDate) {
-        ZoneId zoneId = ZoneId.systemDefault();
-
-        List<FailAccessDTO> failedAccessList = statisticsService.failedAccessStatisticsList(startDate, endDate).stream().map(failedAccess -> {
-            ZonedDateTime zonedDateTime = failedAccess.getAccessDate().atZone(zoneId);
-            Instant instant = zonedDateTime.toInstant();
-
-            return FailAccessDTO.builder()
-                    .accessDate(instant.toEpochMilli())
-                    .accessType(failedAccess.getAccessType())
-                    .doorName(failedAccess.getDoorName()).build();
-        }).toList();
-
-        return ResponseEntity.ok(statisticsService.failedAccessStatisticsList(startDate, endDate));
     }
 }
