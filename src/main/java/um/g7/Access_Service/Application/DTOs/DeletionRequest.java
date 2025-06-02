@@ -1,15 +1,17 @@
 package um.g7.Access_Service.Application.DTOs;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class DoorDTO {
-
+@Builder
+public class DeletionRequest {
     private UUID id;
-    private String name;
-    private int accessLevel;
+    private DeletionType type;
 }
