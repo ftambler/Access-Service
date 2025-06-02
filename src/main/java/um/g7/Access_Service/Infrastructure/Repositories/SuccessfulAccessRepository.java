@@ -1,15 +1,16 @@
 package um.g7.Access_Service.Infrastructure.Repositories;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import um.g7.Access_Service.Domain.Entities.SuccessfulAccess;
+import um.g7.Access_Service.Infrastructure.Projections.AccessCounterProjection;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 @Repository
 public interface SuccessfulAccessRepository extends JpaRepository<SuccessfulAccess, UUID> {
@@ -29,4 +30,6 @@ public interface SuccessfulAccessRepository extends JpaRepository<SuccessfulAcce
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate
     );
+
+    List<SuccessfulAccess> findAllByAccessDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 }
