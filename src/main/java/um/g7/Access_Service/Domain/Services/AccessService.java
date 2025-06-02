@@ -1,13 +1,12 @@
 package um.g7.Access_Service.Domain.Services;
 
 import io.grpc.stub.StreamObserver;
+import org.springframework.grpc.sample.proto.AccessProto.SubmitResponseDTO;
+import org.springframework.stereotype.Service;
 import um.g7.Access_Service.Domain.Entities.FailedAccess;
 import um.g7.Access_Service.Domain.Entities.SuccessfulAccess;
 import um.g7.Access_Service.Infrastructure.Repositories.FailedAccessRepository;
 import um.g7.Access_Service.Infrastructure.Repositories.SuccessfulAccessRepository;
-
-import org.springframework.grpc.sample.proto.AccessProto.SubmitResponseDTO;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AccessService {
