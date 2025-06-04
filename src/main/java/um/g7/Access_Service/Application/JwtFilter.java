@@ -37,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return this.pathMatcher.match("/auth/login", request.getServletPath());
+        return this.pathMatcher.match("/auth/login", request.getServletPath()) || request.getMethod().equals("OPTIONS");
     }
 
     private String parseJwt(HttpServletRequest request) {

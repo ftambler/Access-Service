@@ -31,7 +31,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**").allowedOrigins(frontendOrigin) // Allowed origins
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allowed HTTP methods
                 .allowedHeaders("Content-Type", "Authorization") // Allowed headers
-                .allowCredentials(true) // Allow sending credentials (e.g., cookies)
                 .maxAge(3600);
     }
 
@@ -44,7 +43,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> {}) // usa la config global de CorsConfigurer
+                .cors(cors -> cors.disable()) // usa la config global de CorsConfigurer
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
