@@ -10,7 +10,6 @@ import um.g7.Access_Service.Infrastructure.Projections.AccessCounterProjection;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Repository
 public interface FailedAccessRepository extends JpaRepository<FailedAccess, UUID> {

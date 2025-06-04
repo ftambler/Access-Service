@@ -1,5 +1,6 @@
 package um.g7.Access_Service.Infrastructure;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,13 +19,16 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final AdminService adminService;
 
+    @Value("security.cors.frontendOrigin")
+    private String frontendOrigin;
+
     public WebConfig(AdminService adminService) {
         this.adminService = adminService;
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:5173", "https://example.com") // Allowed origins
+        registry.addMapping("/**").allowedOrigins(frontendOrigin) // Allowed origins
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allowed HTTP methods
                 .allowedHeaders("Content-Type", "Authorization") // Allowed headers
                 .allowCredentials(true) // Allow sending credentials (e.g., cookies)

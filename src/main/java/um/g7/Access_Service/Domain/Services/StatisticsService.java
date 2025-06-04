@@ -10,7 +10,6 @@ import um.g7.Access_Service.Infrastructure.Repositories.SuccessfulAccessReposito
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class StatisticsService {
