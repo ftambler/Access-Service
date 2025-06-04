@@ -1,0 +1,26 @@
+grpc:
+  server:
+    port: 9090
+server:
+  port: 8080
+  error:
+    include-stacktrace: never
+spring:
+  datasource:
+    url: jdbc:postgresql://db-tic2.cpsgokum46no.us-east-2.rds.amazonaws.com:5432/postgres
+    username: postgres
+    password: Equipo_7
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    generate-ddl: true
+  kafka:
+    bootstrap-servers: "18.217.108.156:9092"
+services:
+  vectorize-service-uri: "http://18.119.141.146:5000"
+security:
+  jwt:
+    secret-key: ${JWT-SECRET:cbafda759821472b2a66d48a6f502c5a23ca19bea7b49970e82950fa001391d6}
+    expiration-time: 864000000
