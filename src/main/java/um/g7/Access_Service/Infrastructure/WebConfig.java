@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final AdminService adminService;
 
-    @Value("security.cors.frontendOrigin")
+    @Value("${security.cors.frontendOrigin}")
     private String frontendOrigin;
 
     public WebConfig(AdminService adminService) {
