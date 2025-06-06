@@ -1,20 +1,18 @@
 package um.g7.Access_Service.Application.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import um.g7.Access_Service.Application.DTOs.UserDTO;
-import um.g7.Access_Service.Domain.Entities.UserEntity;
-import um.g7.Access_Service.Domain.Entities.UserRFID;
-import um.g7.Access_Service.Domain.Entities.UserVector;
-import um.g7.Access_Service.Domain.Entities.VectorAndPicture;
+import um.g7.Access_Service.Domain.Entities.*;
 import um.g7.Access_Service.Domain.Exception.UserNotFoundException;
 import um.g7.Access_Service.Domain.Services.UserService;
 import um.g7.Access_Service.Domain.Services.VectorizeService;
 
 import java.util.List;
 import java.util.UUID;
-
+import java.util.stream.Stream;
 
 
 @RestController
@@ -29,13 +27,26 @@ public class UserController {
         this.vectorizeService = vectorizeService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> allUsers = userService.getAllUsers().stream()
             .map(user -> new UserDTO(user.getId(), user.getFullName(), user.getCid(), user.getAccessLevel(), user.isHasRfid(), user.isHasFace()))
             .toList();
-    
+
         return ResponseEntity.ok(allUsers);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<UserDTO>> getPaginatedUsers(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
+        List<UserTableData> paginatedUsers = userService.getPaginatedUsers(page, pageSize);
+        List<UserDTO> userDTOList = paginatedUsers.stream().map(user -> UserDTO.builder()
+                .uuid(user.getId())
+                .fullName(user.getFullName())
+                .cid(user.getCid())
+                .hasRfid(user.isHasRfid())
+                .hasFace(user.isHasFace()).build()).toList();
+
+        return ResponseEntity.ok(userDTOList);
     }
 
     @PostMapping()
