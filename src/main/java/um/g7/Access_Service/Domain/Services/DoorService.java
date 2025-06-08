@@ -1,9 +1,13 @@
 package um.g7.Access_Service.Domain.Services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import um.g7.Access_Service.Application.DTOs.DoorDTO;
 import um.g7.Access_Service.Domain.Entities.Door;
 import um.g7.Access_Service.Domain.Exception.DoorAlreadyExists;
 import um.g7.Access_Service.Domain.Exception.DoorNotFoundException;
@@ -84,5 +88,11 @@ public class DoorService {
 
         deletionTopicProducer.deleteDoor(optionalDoor.get());
         doorRepository.deleteById(doorId);
+    }
+
+    public Page<Door> paginatedDoors(int page, int pageSize, String doorNameLookUp) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        return doorRepository.findAllByDoorNameLookUp(doorNameLookUp, pageable);
     }
 }
