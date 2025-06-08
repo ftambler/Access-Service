@@ -2,6 +2,9 @@ package um.g7.Access_Service.Domain.Services;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import um.g7.Access_Service.Domain.Entities.UserEntity;
 import um.g7.Access_Service.Domain.Entities.UserRFID;
@@ -78,6 +81,20 @@ public class UserService {
                     .hasRfid(proj.getRfid())
                     .hasFace(proj.getFace())
                     .build()).toList();
+    }
+
+    public Page<UserTableData> getPaginatedUsers(int page, int pageSize, String nameLookUp) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        return userRepository.findAllUsersWRfidFacePageable(nameLookUp, pageable).map(proj ->
+                        UserTableData.builder()
+                                .id(proj.getUserId())
+                                .fullName(proj.getFullName())
+                                .cid(proj.getCid())
+                                .accessLevel(proj.getAccessLevel())
+                                .hasRfid(proj.getRfid())
+                                .hasFace(proj.getFace())
+                                .build());
     }
 
     public void deleteUser(UUID userId) throws UserNotFoundException, JsonProcessingException {

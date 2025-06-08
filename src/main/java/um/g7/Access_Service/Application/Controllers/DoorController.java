@@ -1,6 +1,7 @@
 package um.g7.Access_Service.Application.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import um.g7.Access_Service.Application.DTOs.DoorCreatorDTO;
@@ -21,11 +22,22 @@ public class DoorController {
         this.doorService = doorService;
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     public ResponseEntity<List<DoorDTO>> listDoors() {
         List<DoorDTO> doorsDTO = doorService.fetchDoors().stream()
                 .map(door -> new DoorDTO(door.getId(), door.getName(), door.getAccessLevel())).toList();
         return ResponseEntity.ok(doorsDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<DoorDTO>> paginatedDoors(@RequestParam(name = "page") int page, @RequestParam(name = "pageSize") int pageSize, @RequestParam(name = "doorNameLookUp", defaultValue = "") String doorNameLookUp) {
+        Page<DoorDTO> paginatedDoors = doorService.paginatedDoors(page, pageSize, doorNameLookUp).map(door ->
+                DoorDTO.builder()
+                        .id(door.getId())
+                        .accessLevel(door.getAccessLevel())
+                        .name(door.getName()).build());
+
+        return ResponseEntity.ok(paginatedDoors);
     }
 
     @PostMapping("/create")
@@ -36,7 +48,7 @@ public class DoorController {
                 .passcode(doorCreatorDTO.getPasscode()).build();
         return ResponseEntity.ok(doorService.createDoor(door));
     }
-  
+
     @PutMapping("/{id}/change-access-level/{level}")
     public ResponseEntity<String> modifyDoorAccessLevel(@PathVariable("id") UUID doorId, @PathVariable("level") int level) throws JsonProcessingException {
         doorService.changeDoorAccessLevel(doorId, level);
@@ -48,7 +60,7 @@ public class DoorController {
         doorService.changeDoorPasscode(doorId, passcode);
         return ResponseEntity.ok().build();
     }
-  
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDoor(@PathVariable("id") UUID doorId) throws JsonProcessingException {
         doorService.deleteDoor(doorId);
