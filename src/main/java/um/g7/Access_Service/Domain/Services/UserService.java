@@ -83,10 +83,10 @@ public class UserService {
                     .build()).toList();
     }
 
-    public List<UserTableData> getPaginatedUsers(int page, int pageSize) {
+    public Page<UserTableData> getPaginatedUsers(int page, int pageSize, String nameLookUp) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        return userRepository.findAllUsersWRfidFacePageable(pageable).stream()
-                .map(proj ->
+
+        return userRepository.findAllUsersWRfidFacePageable(nameLookUp, pageable).map(proj ->
                         UserTableData.builder()
                                 .id(proj.getUserId())
                                 .fullName(proj.getFullName())
@@ -94,7 +94,7 @@ public class UserService {
                                 .accessLevel(proj.getAccessLevel())
                                 .hasRfid(proj.getRfid())
                                 .hasFace(proj.getFace())
-                                .build()).toList();
+                                .build());
     }
 
     public void deleteUser(UUID userId) throws UserNotFoundException, JsonProcessingException {

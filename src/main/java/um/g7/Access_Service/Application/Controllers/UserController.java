@@ -37,14 +37,15 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserDTO>> getPaginatedUsers(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
-        List<UserTableData> paginatedUsers = userService.getPaginatedUsers(page, pageSize);
-        List<UserDTO> userDTOList = paginatedUsers.stream().map(user -> UserDTO.builder()
+    public ResponseEntity<Page<UserDTO>> getPaginatedUsers(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize,
+                                                           @RequestParam(name = "nameLookUp", defaultValue = "") String nameLookUp) {
+        Page<UserTableData> paginatedUsers = userService.getPaginatedUsers(page, pageSize, nameLookUp);
+        Page<UserDTO> userDTOList = paginatedUsers.map(user -> UserDTO.builder()
                 .uuid(user.getId())
                 .fullName(user.getFullName())
                 .cid(user.getCid())
                 .hasRfid(user.isHasRfid())
-                .hasFace(user.isHasFace()).build()).toList();
+                .hasFace(user.isHasFace()).build());
 
         return ResponseEntity.ok(userDTOList);
     }
