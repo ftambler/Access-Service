@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import um.g7.Access_Service.Application.DTOs.AllAccessesDailyCounterDTO;
 import um.g7.Access_Service.Application.DTOs.FailAccessDTO;
 import um.g7.Access_Service.Application.DTOs.SuccessAccessDTO;
 import um.g7.Access_Service.Domain.Entities.AccessCounterDetails;
@@ -68,5 +69,12 @@ public class StatisticsController {
         }).toList();
 
         return ResponseEntity.ok(failedAccessList);
+    }
+
+    @GetMapping("/daily")
+    public ResponseEntity<AllAccessesDailyCounterDTO> accessesByDay(@RequestParam(name = "startDate") Long startDate, @RequestParam(name = "endDate") Long endDate) {
+        return ResponseEntity.ok(AllAccessesDailyCounterDTO.builder()
+                .successful(statisticsService.successfulAccessesByDay(startDate, endDate))
+                .failed(statisticsService.failedAccessesByDay(startDate, endDate)).build());
     }
 }

@@ -6,9 +6,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import um.g7.Access_Service.Domain.Entities.SuccessfulAccess;
 import um.g7.Access_Service.Infrastructure.Projections.AccessCounterProjection;
+import um.g7.Access_Service.Infrastructure.Projections.DailyCounterProjection;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Repository
@@ -31,4 +33,17 @@ public interface SuccessfulAccessRepository extends JpaRepository<SuccessfulAcce
     );
 
     List<SuccessfulAccess> findAllByAccessDateBetween(LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query(value = """
+        SELECT 
+            CAST(EXTRACT(EPOCH FROM date_trunc('day', a.access_date)) * 1000 AS BIGINT) AS accessDayMillis,
+            COUNT(*) AS accessCount
+        FROM successful_access a
+        WHERE a.access_date BETWEEN :startDate AND :endDate
+        GROUP BY date_trunc('day', a.access_date)
+        ORDER BY accessDayMillis
+        """, nativeQuery = true)
+    List<DailyCounterProjection> countAccessesGroupedByDayMillisOnlyWithData(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate);
 }
