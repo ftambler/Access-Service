@@ -6,9 +6,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import um.g7.Access_Service.Domain.Entities.FailedAccess;
 import um.g7.Access_Service.Infrastructure.Projections.AccessCounterProjection;
+import um.g7.Access_Service.Infrastructure.Projections.DailyCounterProjection;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Repository
@@ -30,4 +33,17 @@ public interface FailedAccessRepository extends JpaRepository<FailedAccess, UUID
             @Param("endDate") LocalDateTime endDate);
 
     List<FailedAccess> findAllByAccessDateBetween(LocalDateTime startLocalDateTime, LocalDateTime endLocalDateTime);
+
+    @Query(value = """
+        SELECT 
+            CAST(EXTRACT(EPOCH FROM date_trunc('day', a.access_date)) * 1000 AS BIGINT) AS accessDayMillis,
+            COUNT(*) AS accessCount
+        FROM failed_access a
+        WHERE a.access_date BETWEEN :startDate AND :endDate
+        GROUP BY date_trunc('day', a.access_date)
+        ORDER BY accessDayMillis
+        """, nativeQuery = true)
+    List<DailyCounterProjection> countAccessesGroupedByDayMillisOnlyWithData(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate);
 }
