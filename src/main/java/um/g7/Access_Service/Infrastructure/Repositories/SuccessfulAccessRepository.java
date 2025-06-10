@@ -10,7 +10,6 @@ import um.g7.Access_Service.Infrastructure.Projections.DailyCounterProjection;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Repository

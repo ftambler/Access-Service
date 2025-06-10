@@ -8,6 +8,8 @@ service Access {
     rpc SubmitSuccessfulAccess(SuccessfulAccessDTO) returns (SubmitResponseDTO) {} 
     
     rpc SubmitFailedAccess(FailedAccessDTO) returns (SubmitResponseDTO) {}
+
+    rpc SendEmail(FailedAccessDTO) returns (SubmitResponseDTO) {}
 }
 
 message SuccessfulAccessDTO {

@@ -12,8 +12,6 @@ import um.g7.Access_Service.Domain.Services.VectorizeService;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
-
 
 @RestController
 @RequestMapping("/users")
@@ -43,6 +41,7 @@ public class UserController {
         Page<UserDTO> userDTOList = paginatedUsers.map(user -> UserDTO.builder()
                 .uuid(user.getId())
                 .fullName(user.getFullName())
+                .accessLevel(user.getAccessLevel())
                 .cid(user.getCid())
                 .hasRfid(user.isHasRfid())
                 .hasFace(user.isHasFace()).build());

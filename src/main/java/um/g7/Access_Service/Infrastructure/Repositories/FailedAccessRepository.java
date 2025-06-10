@@ -8,10 +8,8 @@ import um.g7.Access_Service.Domain.Entities.FailedAccess;
 import um.g7.Access_Service.Infrastructure.Projections.AccessCounterProjection;
 import um.g7.Access_Service.Infrastructure.Projections.DailyCounterProjection;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Repository

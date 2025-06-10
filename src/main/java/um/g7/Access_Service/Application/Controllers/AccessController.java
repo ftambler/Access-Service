@@ -25,6 +25,12 @@ public class AccessController extends AccessGrpc.AccessImplBase{
     }
 
     @Override
+    public void sendEmail(FailedAccessDTO request, StreamObserver<SubmitResponseDTO> responseObserver) {
+        System.out.println("Send Mail");
+        responseObserver.onCompleted();
+    }
+
+    @Override
     public void submitFailedAccess(FailedAccessDTO request, StreamObserver<SubmitResponseDTO> responseObserver) {
         FailedAccess failedAccess = FailedAccess.builder()
             .accessId(UUID.randomUUID())
