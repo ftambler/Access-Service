@@ -8,6 +8,7 @@ import um.g7.Access_Service.Domain.Exception.AdminAlreadyExists;
 import um.g7.Access_Service.Domain.Exception.BadCredentialsException;
 import um.g7.Access_Service.Infrastructure.Repositories.AdminRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -73,5 +74,9 @@ public class AdminService {
 
     public void checkForAdmin() throws AdminAlreadyExists {
         if(adminRepository.count() == 0) register("admin@admin.com", "admin");
+    }
+
+    public List<Admin> getAllAdmins() {
+        return adminRepository.findAll();
     }
 }
