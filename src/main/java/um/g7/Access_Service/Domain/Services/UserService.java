@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import um.g7.Access_Service.Domain.Entities.UserEntity;
 import um.g7.Access_Service.Domain.Entities.UserRFID;
@@ -84,7 +85,7 @@ public class UserService {
     }
 
     public Page<UserTableData> getPaginatedUsers(int page, int pageSize, String nameLookUp) {
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("full_name"));
 
         return userRepository.findAllUsersWRfidFacePageable(nameLookUp, pageable).map(proj ->
                         UserTableData.builder()
