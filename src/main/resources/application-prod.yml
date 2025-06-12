@@ -7,9 +7,9 @@ server:
     include-stacktrace: never
 spring:
   datasource:
-    url: ${POSTGRES-DB}
-    username: ${POSTGRES-USERNAME}
-    password: ${POSTGRES-PASSWORD}
+    url: ${POSTGRES_DB}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     driverClassName: org.postgresql.Driver
   jpa:
     hibernate:
@@ -17,18 +17,18 @@ spring:
     show-sql: false
     generate-ddl: true
   kafka:
-    bootstrap-servers: ${KAFKA-BOOTSTRAP-SERVERS}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
 services:
-  vectorize-service-uri: ${VECTORIZE-SERVICE}
+  vectorize-service-uri: ${VECTORIZE_SERVICE}
 security:
   jwt:
-    secret-key: ${JWT-SECRET:cbafda759821472b2a66d48a6f502c5a23ca19bea7b49970e82950fa001391d6}
+    secret-key: ${JWT_SECRET:cbafda759821472b2a66d48a6f502c5a23ca19bea7b49970e82950fa001391d6}
     expiration-time: 864000000
   cors:
-    frontendOrigin: ${FRONTEND-ORIGIN:*}
+    frontendOrigin: ${FRONTEND_ORIGIN:*}
 aws:
   ses:
-    accessKey: ${AWS-SES-ACCESSKEY:a}
-    secretKey: ${AWS-SES-SECRETKEY:a}
-    configSet: ${AWS-SES-CONFIGSET:a}
-    senderEmail: ${AWS-SES-SENDEREMAIL:a}
+    accessKey: ${AWS_SES_ACCESSKEY:a}
+    secretKey: ${AWS_SES_SECRETKEY:a}
+    configSet: ${AWS_SES_CONFIGSET:a}
+    senderEmail: ${AWS_SES_SENDEREMAIL:a}
