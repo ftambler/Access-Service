@@ -26,3 +26,9 @@ security:
     expiration-time: 864000000
   cors:
     frontendOrigin: ${FRONTEND-ORIGIN:*} 
+aws:
+  ses:
+    accessKey: ${AWS-SES-ACCESSKEY:a}
+    secretKey: ${AWS-SES-SECRETKEY:a}
+    configSet: ${AWS-SES-CONFIGSET:a}
+    senderEmail: ${AWS-SES-SENDEREMAIL:a}
