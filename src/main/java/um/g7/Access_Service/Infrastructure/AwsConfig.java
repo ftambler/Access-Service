@@ -10,8 +10,6 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 
-import um.g7.Access_Service.Domain.Services.AdminService;
-
 @Configuration
 public class AwsConfig {
 
@@ -22,7 +20,7 @@ public class AwsConfig {
     private String secretKey;
 
     @Bean
-    public AmazonSimpleEmailService EmailService(AdminService adminService) {
+    public AmazonSimpleEmailService EmailService() {
         return AmazonSimpleEmailServiceClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .withRegion(Regions.US_EAST_2)

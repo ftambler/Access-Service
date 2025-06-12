@@ -2,6 +2,7 @@ package um.g7.Access_Service.Domain.Services;
 
 import org.springframework.stereotype.Service;
 import um.g7.Access_Service.Domain.Entities.AccessCounterDetails;
+import um.g7.Access_Service.Domain.Entities.DayAccessCounter;
 import um.g7.Access_Service.Domain.Entities.FailedAccess;
 import um.g7.Access_Service.Domain.Entities.SuccessfulAccess;
 import um.g7.Access_Service.Infrastructure.Repositories.FailedAccessRepository;
@@ -65,57 +66,49 @@ public class StatisticsService {
         return failedAccessRepository.findAllByAccessDateBetween(startLocalDateTime, endLocalDateTime);
     }
 
-    public List<Map<String, Long>> successfulAccessesByDay(long startDate, long endDate) {
+    public List<DayAccessCounter> successfulAccessesByDay(long startDate, long endDate) {
         LocalDateTime startLocalDateTime = LocalDateTime.ofEpochSecond(startDate/1000, 0, ZONE_OFFSET);
         LocalDateTime endLocalDateTime = LocalDateTime.ofEpochSecond(endDate/1000, 0, ZONE_OFFSET);
 
-        List<Map<String, Long>> list = successfulAccessRepository.countAccessesGroupedByDayMillisOnlyWithData(startLocalDateTime, endLocalDateTime)
-                .stream().map(dailyCounter -> Map.of("accessDayMillis", dailyCounter.getAccessDayMillis(), "accessCount", dailyCounter.getAccessCount())).toList();
+        List<DayAccessCounter> list = successfulAccessRepository.countAccessesGroupedByDayMillisOnlyWithData(startLocalDateTime, endLocalDateTime)
+                .stream().map(dailyCounter -> new DayAccessCounter(dailyCounter.getAccessDayMillis(), dailyCounter.getAccessCount())).toList();
 
-        return fillEmptyDays(list);
+        return fillEmptyDays(list, startDate, endDate);
     }
 
-    public List<Map<String, Long>> failedAccessesByDay(long startDate, long endDate) {
+    public List<DayAccessCounter> failedAccessesByDay(long startDate, long endDate) {
         LocalDateTime startLocalDateTime = LocalDateTime.ofEpochSecond(startDate/1000, 0, ZONE_OFFSET);
         LocalDateTime endLocalDateTime = LocalDateTime.ofEpochSecond(endDate/1000, 0, ZONE_OFFSET);
 
-        List<Map<String, Long>> list = failedAccessRepository.countAccessesGroupedByDayMillisOnlyWithData(startLocalDateTime, endLocalDateTime)
-                .stream().map(dailyCounter -> Map.of("accessDayMillis", dailyCounter.getAccessDayMillis(), "accessCount", dailyCounter.getAccessCount())).toList();
+        List<DayAccessCounter> list = failedAccessRepository.countAccessesGroupedByDayMillisOnlyWithData(startLocalDateTime, endLocalDateTime)
+                .stream().map(dailyCounter -> new DayAccessCounter(dailyCounter.getAccessDayMillis(), dailyCounter.getAccessCount())).toList();
 
-        return fillEmptyDays(list);
+        return fillEmptyDays(list, startDate, endDate);
     }
 
-    private List<Map<String, Long>> fillEmptyDays(List<Map<String, Long>> list) {
-        if (list.isEmpty())
-            return list;
-
+    private List<DayAccessCounter> fillEmptyDays(List<DayAccessCounter> list, long startDate, long endDate) {
         Set<Long> existingDays = list.stream()
-                .map(m -> m.get("accessDayMillis"))
+                .map(m -> m.getTimestamp())
                 .collect(Collectors.toSet());
 
-        List<Map<String, Long>> fullList = new ArrayList<>();
-
-        long current = list.getFirst().get("accessDayMillis");
-        long endMillis = list.getLast().get("accessDayMillis");
-
+        List<DayAccessCounter> fullList = new ArrayList<>();
+        
         long oneDayMillis = 86_400_000L;
+        long current = startDate - (startDate % oneDayMillis);
+        long endMillis = endDate - (endDate % oneDayMillis);
 
         while (current <= endMillis) {
             if (!existingDays.contains(current)) {
-                fullList.add(Map.of(
-                        "accessDayMillis", current,
-                        "accessCount", 0L
-                ));
+                fullList.add(new DayAccessCounter(current, 0L));
             }
             current += oneDayMillis;
         }
 
         fullList.addAll(list);
 
-        fullList.sort(Comparator.comparingLong(m -> m.get("accessDayMillis")));
+        fullList.sort(Comparator.comparingLong(m -> m.getTimestamp()));
 
         return fullList;
     }
-
 
 }

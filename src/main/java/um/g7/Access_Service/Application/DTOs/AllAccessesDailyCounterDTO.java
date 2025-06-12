@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import um.g7.Access_Service.Domain.Entities.DayAccessCounter;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class AllAccessesDailyCounterDTO {
-    private List<Map<String, Long>> successful;
-    private List<Map<String, Long>> failed;
+    private List<DayAccessCounter> successful;
+    private List<DayAccessCounter> failed;
 }
