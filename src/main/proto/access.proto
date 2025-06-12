@@ -9,7 +9,14 @@ service Access {
     
     rpc SubmitFailedAccess(FailedAccessDTO) returns (SubmitResponseDTO) {}
 
-    rpc SendEmail(FailedAccessDTO) returns (SubmitResponseDTO) {}
+    rpc SendEmail(MailFailDTO) returns (SubmitResponseDTO) {}
+}
+
+message MailFailDTO {
+    int64 time = 1;
+    AccessTypeEnum accessType = 2;
+    string doorName = 3;
+    int32 failedStreak = 4;
 }
 
 message SuccessfulAccessDTO {

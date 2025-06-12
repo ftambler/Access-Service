@@ -4,12 +4,14 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.grpc.sample.proto.AccessGrpc;
 import org.springframework.grpc.sample.proto.AccessProto.FailedAccessDTO;
+import org.springframework.grpc.sample.proto.AccessProto.MailFailDTO;
 import org.springframework.grpc.sample.proto.AccessProto.SubmitResponseDTO;
 import org.springframework.grpc.sample.proto.AccessProto.SuccessfulAccessDTO;
 import um.g7.Access_Service.Domain.Entities.AccessTypeEnum;
 import um.g7.Access_Service.Domain.Entities.FailedAccess;
 import um.g7.Access_Service.Domain.Entities.SuccessfulAccess;
 import um.g7.Access_Service.Domain.Services.AccessService;
+import um.g7.Access_Service.Domain.Services.EmailService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -19,14 +21,19 @@ import java.util.UUID;
 public class AccessController extends AccessGrpc.AccessImplBase{
 
     private final AccessService accessService;
+    private final EmailService emailService;
 
-    public AccessController(AccessService accessService) {
+    public AccessController(AccessService accessService, EmailService emailService) {
         this.accessService = accessService;
+        this.emailService = emailService;
     }
 
+    
     @Override
-    public void sendEmail(FailedAccessDTO request, StreamObserver<SubmitResponseDTO> responseObserver) {
-        System.out.println("Send Mail");
+    public void sendEmail(MailFailDTO request, StreamObserver<SubmitResponseDTO> responseObserver) {
+        emailService.sendEmail(request.getDoorName(), request.getTime(), AccessTypeEnum.values()[request.getAccessTypeValue()].name(), request.getFailedStreak());
+        
+        responseObserver.onNext(SubmitResponseDTO.newBuilder().setResponse("Email sent!").build());
         responseObserver.onCompleted();
     }
 
