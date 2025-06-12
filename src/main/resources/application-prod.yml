@@ -7,9 +7,9 @@ server:
     include-stacktrace: never
 spring:
   datasource:
-    url: jdbc:postgresql://db-tic2.cpsgokum46no.us-east-2.rds.amazonaws.com:5432/postgres
-    username: postgres
-    password: Equipo_7
+    url: ${POSTGRES-DB}
+    username: ${POSTGRES-USERNAME}
+    password: ${POSTGRES-PASSWORD}
     driverClassName: org.postgresql.Driver
   jpa:
     hibernate:
@@ -17,12 +17,18 @@ spring:
     show-sql: false
     generate-ddl: true
   kafka:
-    bootstrap-servers: "18.217.108.156:9092"
+    bootstrap-servers: ${KAFKA-BOOTSTRAP-SERVERS}
 services:
-  vectorize-service-uri: "http://18.119.141.146:5000"
+  vectorize-service-uri: ${VECTORIZE-SERVICE}
 security:
   jwt:
     secret-key: ${JWT-SECRET:cbafda759821472b2a66d48a6f502c5a23ca19bea7b49970e82950fa001391d6}
     expiration-time: 864000000
   cors:
     frontendOrigin: ${FRONTEND-ORIGIN:*}
+aws:
+  ses:
+    accessKey: ${AWS-SES-ACCESSKEY:a}
+    secretKey: ${AWS-SES-SECRETKEY:a}
+    configSet: ${AWS-SES-CONFIGSET:a}
+    senderEmail: ${AWS-SES-SENDEREMAIL:a}
