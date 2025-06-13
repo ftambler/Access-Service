@@ -1,5 +1,8 @@
 package um.g7.Access_Service.Domain.Services;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +12,7 @@ import um.g7.Access_Service.Domain.Exception.BadCredentialsException;
 import um.g7.Access_Service.Infrastructure.Repositories.AdminRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -78,5 +82,11 @@ public class AdminService {
 
     public List<Admin> getAllAdmins() {
         return adminRepository.findAll();
+    }
+
+    public List<String> paginatedAdmins(int page, int pageSize, String nameLookUp) {
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("email"));
+
+        return adminRepository.paginatedAdmins(nameLookUp, pageable);
     }
 }
