@@ -1,5 +1,6 @@
 package um.g7.Access_Service.Domain.Services;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -84,7 +85,7 @@ public class AdminService {
         return adminRepository.findAll();
     }
 
-    public List<String> paginatedAdmins(int page, int pageSize, String nameLookUp) {
+    public Page<String> paginatedAdmins(int page, int pageSize, String nameLookUp) {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("email"));
 
         return adminRepository.paginatedAdmins(nameLookUp, pageable);

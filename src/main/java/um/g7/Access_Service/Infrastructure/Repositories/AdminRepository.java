@@ -1,6 +1,7 @@
 package um.g7.Access_Service.Infrastructure.Repositories;
 
 import org.springframework.core.annotation.MergedAnnotationPredicates;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,5 +29,5 @@ public interface AdminRepository extends JpaRepository<Admin, UUID> {
         SELECT COUNT(*) FROM admins a
         WHERE a.email LIKE CONCAT('%', :nameLookUp, '%')
         """, nativeQuery = true)
-    List<String> paginatedAdmins(@Param("nameLookUp") String nameLookUp, Pageable pageable);
+    Page<String> paginatedAdmins(@Param("nameLookUp") String nameLookUp, Pageable pageable);
 }

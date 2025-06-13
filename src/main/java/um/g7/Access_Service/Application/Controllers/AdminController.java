@@ -1,9 +1,9 @@
 package um.g7.Access_Service.Application.Controllers;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import um.g7.Access_Service.Application.DTOs.AdminMailsDTO;
 import um.g7.Access_Service.Application.DTOs.AdminTokenDTO;
 import um.g7.Access_Service.Application.DTOs.CredentialsDTO;
 import um.g7.Access_Service.Domain.Exception.AdminAlreadyExists;
@@ -35,10 +35,9 @@ public class AdminController {
     }
 
     @GetMapping("/admins")
-    public ResponseEntity<AdminMailsDTO> paginatedAdmins(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize,
-                                                         @RequestParam(value = "nameLookUp", defaultValue = "") String nameLookUp) {
-        AdminMailsDTO adminMailsDTO = new AdminMailsDTO(adminService.paginatedAdmins(page, pageSize, nameLookUp));
-        return ResponseEntity.ok(adminMailsDTO);
+    public ResponseEntity<Page<String>> paginatedAdmins(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize,
+                                                        @RequestParam(value = "nameLookUp", defaultValue = "") String nameLookUp) {
+        return ResponseEntity.ok(adminService.paginatedAdmins(page, pageSize, nameLookUp));
     }
     
     @PutMapping("/auth/change-password")
