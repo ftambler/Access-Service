@@ -7,8 +7,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import um.g7.Access_Service.Domain.Entities.Admin;
 import um.g7.Access_Service.Domain.Exception.AdminAlreadyExists;
+import um.g7.Access_Service.Domain.Exception.AdminDoesNotExist;
 import um.g7.Access_Service.Domain.Exception.BadCredentialsException;
 import um.g7.Access_Service.Infrastructure.Repositories.AdminRepository;
 
@@ -89,5 +91,15 @@ public class AdminService {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("email"));
 
         return adminRepository.paginatedAdmins(nameLookUp, pageable);
+    }
+
+    @Transactional
+    public void deleteAdminSelfAccount(String adminEmail) {
+        Optional<Admin> optionalAdmin = adminRepository.getByEmail(adminEmail);
+
+        if (optionalAdmin.isEmpty())
+            throw new AdminDoesNotExist("Could not find an admin with that email");
+
+        adminRepository.deleteByEmail(adminEmail);
     }
 }

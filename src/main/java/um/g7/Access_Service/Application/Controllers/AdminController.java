@@ -1,5 +1,6 @@
 package um.g7.Access_Service.Application.Controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,4 +48,12 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/admins/self")
+    public ResponseEntity<?> deleteAdminSelfAccount(HttpServletRequest request) {
+        String adminEmail = (String) request.getAttribute("email");
+
+        adminService.deleteAdminSelfAccount(adminEmail);
+
+        return ResponseEntity.ok().build();
+    }
 }

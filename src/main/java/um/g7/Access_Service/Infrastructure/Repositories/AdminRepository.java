@@ -30,4 +30,6 @@ public interface AdminRepository extends JpaRepository<Admin, UUID> {
         WHERE a.email LIKE CONCAT('%', :nameLookUp, '%')
         """, nativeQuery = true)
     Page<String> paginatedAdmins(@Param("nameLookUp") String nameLookUp, Pageable pageable);
+
+    void deleteByEmail(String adminEmail);
 }
