@@ -41,6 +41,7 @@ public class DoorService {
 
     public String createDoor(Door door) throws JsonProcessingException {
         Optional<Door> optionalDoor = doorRepository.findByName(door.getName());
+
         if (optionalDoor.isPresent())
             throw new DoorAlreadyExists("A door with that name already exists");
 

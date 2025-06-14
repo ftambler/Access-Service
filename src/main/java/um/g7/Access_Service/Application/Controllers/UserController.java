@@ -2,6 +2,7 @@ package um.g7.Access_Service.Application.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import um.g7.Access_Service.Application.DTOs.UserDTO;
@@ -57,7 +58,7 @@ public class UserController {
                 .cid(userDTO.getCid())
                 .accessLevel(userDTO.getAccessLevel()).build();
 
-        return ResponseEntity.ok(userService.createUser(user));
+        return new ResponseEntity<UserEntity>(userService.createUser(user), HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}/vector")
@@ -73,13 +74,14 @@ public class UserController {
     @PostMapping("/{id}/rfid/{rfid}")
     public ResponseEntity<UserRFID> insertRFID(@PathVariable("id") UUID userId, @PathVariable("rfid") String rfid) throws JsonProcessingException {
         UserRFID userRFID = new UserRFID(userId, rfid);
-        return ResponseEntity.ok(userService.insertRFID(userRFID));
 
+        return ResponseEntity.ok(userService.insertRFID(userRFID));
     }
 
     @PutMapping("/{id}/change-access-level/{newLevel}")
     public ResponseEntity<ResponseStatus> changeAccessLevel(@PathVariable("id") UUID userId, @PathVariable("newLevel") int newLevel) throws JsonProcessingException, UserNotFoundException {
         userService.changeAccessLevel(userId, newLevel);
+
         return ResponseEntity.ok().build();
     }
 

@@ -11,6 +11,7 @@ import um.g7.Access_Service.Domain.Entities.UserEntity;
 import um.g7.Access_Service.Domain.Entities.UserRFID;
 import um.g7.Access_Service.Domain.Entities.UserTableData;
 import um.g7.Access_Service.Domain.Entities.UserVector;
+import um.g7.Access_Service.Domain.Exception.UserAlreadyExists;
 import um.g7.Access_Service.Domain.Exception.UserNotFoundException;
 import um.g7.Access_Service.Infrastructure.KafkaProducers.DeletionTopicProducer;
 import um.g7.Access_Service.Infrastructure.KafkaProducers.UserTopicProducer;
@@ -45,6 +46,11 @@ public class UserService {
     }
 
     public UserEntity createUser(UserEntity user) throws JsonProcessingException {
+        Optional<UserEntity> optionalUser = userRepository.findByCid(user.getCid());
+
+        if (optionalUser.isPresent())
+            throw new UserAlreadyExists("Another user has the same document");
+
         userTopicProducer.addUser(user);
         return userRepository.save(user);
     }

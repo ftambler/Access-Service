@@ -2,6 +2,7 @@ package um.g7.Access_Service.Application.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import um.g7.Access_Service.Application.DTOs.DoorCreatorDTO;
@@ -46,7 +47,8 @@ public class DoorController {
                 .name(doorCreatorDTO.getDoorName())
                 .accessLevel(doorCreatorDTO.getAccessLevel())
                 .passcode(doorCreatorDTO.getPasscode()).build();
-        return ResponseEntity.ok(doorService.createDoor(door));
+
+        return new ResponseEntity<String>(doorService.createDoor(door), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/change-access-level/{level}")

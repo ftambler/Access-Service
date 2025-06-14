@@ -29,9 +29,9 @@ public class AdminController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<HttpStatus> register(@RequestBody CredentialsDTO credentialsDTO) throws AdminAlreadyExists {
-        adminService.register(credentialsDTO.getEmail(), credentialsDTO.getPassword());       
+        adminService.register(credentialsDTO.getEmail(), credentialsDTO.getPassword());
 
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
     }
 
     @GetMapping("/admins")

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import um.g7.Access_Service.Domain.Entities.UserEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -40,5 +41,6 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
         WHERE LOWER(u.full_name) LIKE LOWER(CONCAT('%', :nameLookUp, '%'))
         """, nativeQuery = true)
     Page<UserTableDataProjection> findAllUsersWRfidFacePageable(@Param("nameLookUp") String nameLookUp, Pageable pageable);
-    
-} 
+
+    Optional<UserEntity> findByCid(String cid);
+}
