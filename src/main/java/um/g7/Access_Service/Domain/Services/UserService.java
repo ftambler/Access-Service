@@ -56,8 +56,12 @@ public class UserService {
     }
 
     public UserVector insertVector(UserVector userVector) throws JsonProcessingException {
+        Optional<UserVector> optionalUserVector = userVectorRepository.findById(userVector.getUserId());
+
+        if (optionalUserVector.isPresent())
+            userVector = optionalUserVector.get();
+
         userTopicProducer.addVectorToUser(userVector);
-        
         return userVectorRepository.save(userVector);
     }
 
