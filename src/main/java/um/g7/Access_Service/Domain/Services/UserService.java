@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import um.g7.Access_Service.Domain.Entities.UserEntity;
 import um.g7.Access_Service.Domain.Entities.UserRFID;
 import um.g7.Access_Service.Domain.Entities.UserTableData;
@@ -108,11 +110,13 @@ public class UserService {
                                 .build());
     }
 
+    @Transactional
+    @Modifying
     public void deleteUser(UUID userId) throws UserNotFoundException, JsonProcessingException {
         Optional<UserEntity> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isEmpty())
-            throw new UserNotFoundException("Cannot delete non existant user");
+            throw new UserNotFoundException("Cannot delete non existent user");
 
         Optional<UserRFID> optionalUserRFID = userRFIDRepository.findById(userId);
 
