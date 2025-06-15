@@ -10,7 +10,7 @@ import um.g7.Access_Service.Domain.Entities.VectorAndPicture;
 public class VectorizeService {
     
     private final RestTemplate restTemplate;
-    
+
     @Value("${services.vectorize-service-uri}")
     private String vectorizeURI;
 

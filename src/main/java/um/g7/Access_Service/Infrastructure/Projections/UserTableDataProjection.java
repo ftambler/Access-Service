@@ -1,4 +1,4 @@
-package um.g7.Access_Service.Infrastructure.Repositories;
+package um.g7.Access_Service.Infrastructure.Projections;
 
 import java.util.UUID;
 

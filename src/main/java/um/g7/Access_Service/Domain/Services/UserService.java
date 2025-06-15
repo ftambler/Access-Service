@@ -111,22 +111,15 @@ public class UserService {
     }
 
     @Transactional
-    @Modifying
     public void deleteUser(UUID userId) throws UserNotFoundException, JsonProcessingException {
         Optional<UserEntity> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isEmpty())
             throw new UserNotFoundException("Cannot delete non existent user");
 
-        Optional<UserRFID> optionalUserRFID = userRFIDRepository.findById(userId);
+        userRFIDRepository.deleteById(userId);
 
-        if (optionalUserRFID.isPresent())
-            userRFIDRepository.deleteById(userId);
-
-        Optional<UserVector> optionalUserVector = userVectorRepository.findById(userId);
-
-        if (optionalUserVector.isPresent())
-            userVectorRepository.deleteById(userId);
+        userVectorRepository.deleteByUserId(userId);
 
         deletionTopicProducer.deleteUser(optionalUser.get());
         userRepository.deleteById(userId);
