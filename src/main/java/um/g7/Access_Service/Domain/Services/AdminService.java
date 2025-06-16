@@ -12,6 +12,7 @@ import um.g7.Access_Service.Domain.Entities.Admin;
 import um.g7.Access_Service.Domain.Exception.AdminAlreadyExists;
 import um.g7.Access_Service.Domain.Exception.AdminDoesNotExist;
 import um.g7.Access_Service.Domain.Exception.BadCredentialsException;
+import um.g7.Access_Service.Domain.Exception.DeleteRejected;
 import um.g7.Access_Service.Infrastructure.Repositories.AdminRepository;
 
 import java.util.List;
@@ -93,11 +94,14 @@ public class AdminService {
     }
 
     @Transactional
-    public void deleteAdminSelfAccount(String adminEmail) {
+    public void deleteAdminSelfAccount(String adminEmail) throws DeleteRejected {
         Optional<Admin> optionalAdmin = adminRepository.getByEmail(adminEmail);
 
         if (optionalAdmin.isEmpty())
             throw new AdminDoesNotExist("Could not find an admin with that email");
+
+        if(adminRepository.count() == 1)
+            throw new DeleteRejected("Cannot delete: One admin must exist at all times");
 
         adminRepository.deleteByEmail(adminEmail);
     }

@@ -9,6 +9,7 @@ import um.g7.Access_Service.Application.DTOs.AdminTokenDTO;
 import um.g7.Access_Service.Application.DTOs.CredentialsDTO;
 import um.g7.Access_Service.Domain.Exception.AdminAlreadyExists;
 import um.g7.Access_Service.Domain.Exception.BadCredentialsException;
+import um.g7.Access_Service.Domain.Exception.DeleteRejected;
 import um.g7.Access_Service.Domain.Services.AdminService;
 
 @RestController
@@ -49,7 +50,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/admins/self")
-    public ResponseEntity<?> deleteAdminSelfAccount(HttpServletRequest request) {
+    public ResponseEntity<?> deleteAdminSelfAccount(HttpServletRequest request) throws DeleteRejected {
         String adminEmail = (String) request.getAttribute("email");
 
         adminService.deleteAdminSelfAccount(adminEmail);

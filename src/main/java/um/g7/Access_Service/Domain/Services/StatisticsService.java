@@ -19,7 +19,7 @@ public class StatisticsService {
     private final SuccessfulAccessRepository successfulAccessRepository;
     private final FailedAccessRepository failedAccessRepository;
 
-    private final ZoneOffset ZONE_OFFSET = ZoneOffset.of("-03:00");
+    private final ZoneOffset ZONE_OFFSET = ZoneOffset.of("Z");
 
     public StatisticsService(SuccessfulAccessRepository successfulAccessRepository, FailedAccessRepository failedAccessRepository) {
         this.successfulAccessRepository = successfulAccessRepository;
