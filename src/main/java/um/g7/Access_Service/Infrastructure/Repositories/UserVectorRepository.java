@@ -21,6 +21,7 @@ public interface UserVectorRepository extends JpaRepository<UserVector, UUID> {
     Optional<UUID> findByUserId(@Param("userId") UUID userId);
 
     @Modifying
+    @Transactional
     @Query(value = """
             DELETE FROM user_vector uv WHERE uv.user_id = :userId
             """, nativeQuery = true)

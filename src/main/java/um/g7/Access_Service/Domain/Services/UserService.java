@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import um.g7.Access_Service.Domain.Entities.UserEntity;
@@ -58,11 +57,8 @@ public class UserService {
     }
 
     public UserVector insertVector(UserVector userVector) throws JsonProcessingException {
-        Optional<UserVector> optionalUserVector = userVectorRepository.findById(userVector.getUserId());
-
-        if (optionalUserVector.isPresent())
-            userVector = optionalUserVector.get();
-
+        userVectorRepository.deleteByUserId(userVector.getUserId());
+  
         userTopicProducer.addVectorToUser(userVector);
         return userVectorRepository.save(userVector);
     }
