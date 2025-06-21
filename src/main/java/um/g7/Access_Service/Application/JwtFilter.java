@@ -4,10 +4,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
-import um.g7.Access_Service.Domain.Exception.InvalidTokenException;
 import um.g7.Access_Service.Domain.Services.JwtService;
 
 import java.io.IOException;
@@ -30,7 +30,9 @@ public class JwtFilter extends OncePerRequestFilter {
             String username = jwtService.getEmailFromToken(jwt);    
             request.setAttribute("email", username);
         }
-        else throw new InvalidTokenException("Invalid Token");
+        else
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid token");
+
         
         filterChain.doFilter(request, response);
     }
