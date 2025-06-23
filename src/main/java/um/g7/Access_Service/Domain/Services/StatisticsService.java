@@ -71,7 +71,7 @@ public class StatisticsService {
         LocalDateTime endLocalDateTime = LocalDateTime.ofEpochSecond(endDate/1000, 0, ZONE_OFFSET);
 
         List<DayAccessCounter> list = successfulAccessRepository.countAccessesGroupedByDayMillisOnlyWithData(startLocalDateTime, endLocalDateTime)
-                .stream().map(dailyCounter -> new DayAccessCounter(dailyCounter.getAccessDayMillis(), dailyCounter.getAccessCount())).toList();
+                .stream().map(dailyCounter -> new DayAccessCounter(dailyCounter.getAccessDayMillis()+86400000, dailyCounter.getAccessCount())).toList();
 
         return fillEmptyDays(list, startDate, endDate);
     }
@@ -81,7 +81,7 @@ public class StatisticsService {
         LocalDateTime endLocalDateTime = LocalDateTime.ofEpochSecond(endDate/1000, 0, ZONE_OFFSET);
 
         List<DayAccessCounter> list = failedAccessRepository.countAccessesGroupedByDayMillisOnlyWithData(startLocalDateTime, endLocalDateTime)
-                .stream().map(dailyCounter -> new DayAccessCounter(dailyCounter.getAccessDayMillis(), dailyCounter.getAccessCount())).toList();
+                .stream().map(dailyCounter -> new DayAccessCounter(dailyCounter.getAccessDayMillis()+86400000, dailyCounter.getAccessCount())).toList();
 
         return fillEmptyDays(list, startDate, endDate);
     }
